@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stars olish - StarPayUz</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f1419;
+            color: #ffffff;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7c8cff;
+            margin-bottom: 10px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3a 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2a3244;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #8b92a8;
+            margin-bottom: 8px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .topup-button {
+            display: inline-block;
+            background: #4ade80;
+            color: #0f1419;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #8b92a8;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .username-input {
+            width: 100%;
+            background: #1a1f2e;
+            border: 1px solid #2a3244;
+            border-radius: 12px;
+            padding: 16px;
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .username-input::placeholder {
+            color: #525866;
+        }
+
+        .username-input:focus {
+            outline: none;
+            border-color: #7c8cff;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .verify-button {
+            background: #7c8cff;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .amount-label {
+            font-size: 14px;
+            color: #8b92a8;
+            margin-bottom: 10px;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .package-card {
+            background: #1a1f2e;
+            border: 2px solid #2a3244;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .package-card.selected {
+            border-color: #7c8cff;
+            background: #252b3a;
+        }
+
+        .package-emoji {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .package-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .package-price {
+            font-size: 14px;
+            color: #8b92a8;
+        }
+
+        .buy-button {
+            width: 100%;
+            background: linear-gradient(135deg, #7c8cff 0%, #6366f1 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(124, 140, 255, 0.4);
+            transition: all 0.3s;
+        }
+
+        .buy-button:active {
+            transform: scale(0.98);
+        }
+
+        .buy-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .tabs {
+            display: flex;
+            background: #1a1f2e;
+            border-radius: 16px;
+            padding: 6px;
+            margin: 20px 0;
+            gap: 6px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8b92a8;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+        }
+
+        .tab.active {
+            background: #7c8cff;
+            color: #ffffff;
+        }
+
+        .leaderboard {
+            margin-top: 20px;
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            background: #1a1f2e;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #2a3244;
+        }
+
+        .leader-rank {
+            font-size: 20px;
+            font-weight: 700;
+            color: #7c8cff;
+            margin-right: 16px;
+            min-width: 40px;
+        }
+
+        .leader-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c8cff 0%, #6366f1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .leader-username {
+            font-size: 14px;
+            color: #8b92a8;
+        }
+
+        .leader-stats {
+            text-align: right;
+        }
+
+        .leader-stars {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .leader-amount {
+            font-size: 12px;
+            color: #8b92a8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>StarPayUz</h1>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-label">BALANS:</div>
+        <div class="balance-amount" id="balance">0 so'm</div>
+        <button class="topup-button" onclick="openTopup()">+ Hisobni to'ldirish</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('buy')">🎯 Bugungi</button>
+        <button class="tab" onclick="switchTab('top')">📊 Top Oylik</button>
+        <button class="tab" onclick="switchTab('leaders')">🏆 Liderlar</button>
+    </div>
+
+    <div id="buyTab">
+        <div class="section-title">Telegram Username</div>
+        <div class="input-group">
+            <input type="text" class="username-input" id="username" placeholder="@ username" value="@username">
+            <button class="verify-button" onclick="verifyUsername()">O'zim ga</button>
+        </div>
+
+        <div class="amount-label">Miqdori (Min: 50)</div>
+        
+        <div class="packages-grid">
+            <div class="package-card" onclick="selectPackage(50, 10000)">
+                <div class="package-emoji">⭐</div>
+                <div class="package-amount">50</div>
+                <div class="package-price">10 000 so'm</div>
+            </div>
+            <div class="package-card" onclick="selectPackage(100, 18000)">
+                <div class="package-emoji">⭐</div>
+                <div class="package-amount">100</div>
+                <div class="package-price">18 000 so'm</div>
+            </div>
+            <div class="package-card" onclick="selectPackage(250, 45000)">
+                <div class="package-emoji">⭐</div>
+                <div class="package-amount">250</div>
+                <div class="package-price">45 000 so'm</div>
+            </div>
+            <div class="package-card" onclick="selectPackage(500, 85000)">
+                <div class="package-emoji">⭐</div>
+                <div class="package-amount">500</div>
+                <div class="package-price">85 000 so'm</div>
+            </div>
+        </div>
+
+        <button class="buy-button" id="buyBtn" onclick="buyStars()">Sotib olish</button>
+    </div>
+
+    <div id="topTab" style="display: none;">
+        <div class="section-title">Bo'sh</div>
+    </div>
+
+    <div id="leadersTab" style="display: none;">
+        <div class="leaderboard" id="leaderboard"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+        tg.setHeaderColor('#0f1419');
+        tg.setBackgroundColor('#0f1419');
+
+        let selectedAmount = 0;
+        let selectedPrice = 0;
+        let userBalance = 0;
+
+        // Get user data
+        const initData = tg.initDataUnsafe;
+        if (initData.user) {
+            document.getElementById('username').value = '@' + (initData.user.username || 'username');
+        }
+
+        // Mock balance - в реальности получать с сервера
+        userBalance = 150000;
+        document.getElementById('balance').textContent = userBalance.toLocaleString('uz-UZ') + ' so\'m';
+
+        function selectPackage(amount, price) {
+            selectedAmount = amount;
+            selectedPrice = price;
+            
+            // Remove all selected classes
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            event.target.closest('.package-card').classList.add('selected');
+            
+            // Enable buy button
+            document.getElementById('buyBtn').disabled = false;
+        }
+
+        function buyStars() {
+            if (selectedAmount === 0) {
+                tg.showAlert('Iltimos, paketni tanlang!');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            if (!username || username === '@') {
+                tg.showAlert('Iltimos, username kiriting!');
+                return;
+            }
+
+            if (userBalance < selectedPrice) {
+                tg.showAlert('Balans yetarli emas! Hisobni to\'ldiring.');
+                return;
+            }
+
+            // Send data back to bot
+            tg.sendData(JSON.stringify({
+                action: 'buy_stars',
+                amount: selectedAmount,
+                price: selectedPrice,
+                username: username
+            }));
+
+            tg.close();
+        }
+
+        function verifyUsername() {
+            if (initData.user && initData.user.username) {
+                document.getElementById('username').value = '@' + initData.user.username;
+                tg.showPopup({
+                    title: 'Tasdiqlandi',
+                    message: 'Sizning username o\'rnatildi',
+                    buttons: [{type: 'ok'}]
+                });
+            }
+        }
+
+        function openTopup() {
+            tg.close();
+            // Botga qaytadi va topup sahifasini ochadi
+        }
+
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('buyTab').style.display = 'none';
+            document.getElementById('topTab').style.display = 'none';
+            document.getElementById('leadersTab').style.display = 'none';
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected tab
+            if (tab === 'buy') {
+                document.getElementById('buyTab').style.display = 'block';
+                event.target.classList.add('active');
+            } else if (tab === 'top') {
+                document.getElementById('topTab').style.display = 'block';
+                event.target.classList.add('active');
+            } else if (tab === 'leaders') {
+                document.getElementById('leadersTab').style.display = 'block';
+                event.target.classList.add('active');
+                loadLeaders();
+            }
+        }
+
+        function loadLeaders() {
+            const leaderboard = document.getElementById('leaderboard');
+            const leaders = [
+                {rank: 1, name: 'User 1', username: '@user1', stars: 800, amount: 160000},
+                {rank: 2, name: 'User 2', username: '@user2', stars: 473, amount: 94600},
+                {rank: 3, name: 'User 3', username: '@user3', stars: 150, amount: 30000},
+            ];
+
+            leaderboard.innerHTML = '';
+            leaders.forEach(leader => {
+                const item = document.createElement('div');
+                item.className = 'leader-item';
+                item.innerHTML = `
+                    <div class="leader-rank">#${leader.rank}</div>
+                    <div class="leader-avatar">👤</div>
+                    <div class="leader-info">
+                        <div class="leader-name">${leader.name}</div>
+                        <div class="leader-username">${leader.username}</div>
+                    </div>
+                    <div class="leader-stats">
+                        <div class="leader-stars">⭐ ${leader.stars}</div>
+                        <div class="leader-amount">${leader.amount.toLocaleString('uz-UZ')} so'm</div>
+                    </div>
+                `;
+                leaderboard.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
