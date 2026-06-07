@@ -2,6 +2,8 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import CommandStart, Command
 from aiogram.types import CallbackQuery
+from aiogram.utils.formatting import Text, Bold, as_list, as_marked_section
+from aiogram.enums import ParseMode
 import keyboards
 from database import db
 from datetime import datetime
@@ -31,19 +33,19 @@ async def cmd_start(message: Message):
         user = await db.create_user(user_id, username, first_name, referrer_id)
         
         welcome_text = (
-            f"<emoji id='5312345830382910731'>👋</emoji> <b>Assalomu alaykum, {first_name} — Admin!</b>\n\n"
-            f"<emoji id='5258204546391351475'>💰</emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
-            f"<emoji id='5879905000972358125'>👥</emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
-            f"<emoji id='5224496844188458905'>⚡</emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
+            f"👋 <b>Assalomu alaykum, <tg-emoji emoji-id='5312345830382910731'>{first_name}</tg-emoji> — Admin!</b>\n\n"
+            f"<tg-emoji emoji-id='5258204546391351475'>💰</tg-emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
+            f"<tg-emoji emoji-id='5879905000972358125'>👥</tg-emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
+            f"<tg-emoji emoji-id='5224496844188458905'>⚡</tg-emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
         )
     else:
         await db.update_user_activity(user_id)
         
         welcome_text = (
-            f"<emoji id='5312345830382910731'>👋</emoji> <b>Assalomu alaykum, {first_name} — Admin!</b>\n\n"
-            f"<emoji id='5258204546391351475'>💰</emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
-            f"<emoji id='5879905000972358125'>👥</emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
-            f"<emoji id='5224496844188458905'>⚡</emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
+            f"👋 <b>Assalomu alaykum, <tg-emoji emoji-id='5312345830382910731'>{first_name}</tg-emoji> — Admin!</b>\n\n"
+            f"<tg-emoji emoji-id='5258204546391351475'>💰</tg-emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
+            f"<tg-emoji emoji-id='5879905000972358125'>👥</tg-emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
+            f"<tg-emoji emoji-id='5224496844188458905'>⚡</tg-emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
         )
     
     await message.answer(
@@ -61,10 +63,10 @@ async def back_to_main(message: Message):
     
     if user:
         text = (
-            f"<emoji id='5312345830382910731'>👋</emoji> <b>Assalomu alaykum, {message.from_user.first_name} — Admin!</b>\n\n"
-            f"<emoji id='5258204546391351475'>💰</emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
-            f"<emoji id='5879905000972358125'>👥</emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
-            f"<emoji id='5224496844188458905'>⚡</emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
+            f"👋 <b>Assalomu alaykum, <tg-emoji emoji-id='5312345830382910731'>{message.from_user.first_name}</tg-emoji> — Admin!</b>\n\n"
+            f"<tg-emoji emoji-id='5258204546391351475'>💰</tg-emoji> <b>Balans:</b> {user['balance']:,.0f} so'm\n"
+            f"<tg-emoji emoji-id='5879905000972358125'>👥</tg-emoji> <b>Referallar:</b> {user['referrals']} ta\n\n"
+            f"<tg-emoji emoji-id='5224496844188458905'>⚡</tg-emoji> <i>Quyidagilardan kerakli bo'limni tanlang:</i>"
         )
     else:
         text = "🏠 Bosh menyu:"
