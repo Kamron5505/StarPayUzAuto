@@ -14,165 +14,291 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0f1419;
+            background: #000000;
             color: #ffffff;
-            padding: 20px;
-            padding-bottom: 100px;
+            padding: 0;
+            padding-bottom: 20px;
+            overflow-x: hidden;
         }
 
         .header {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 16px 20px;
+            border-radius: 0 0 24px 24px;
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 30px;
+            position: relative;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 700;
-            color: #7c8cff;
-            margin-bottom: 10px;
+            color: #ffffff;
+            margin-bottom: 4px;
         }
 
-        .balance-card {
-            background: linear-gradient(135deg, #1a1f2e 0%, #252b3a 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #2a3244;
-        }
-
-        .balance-label {
+        .header p {
             font-size: 14px;
-            color: #8b92a8;
-            margin-bottom: 8px;
+            color: #888888;
         }
 
-        .balance-amount {
-            font-size: 32px;
+        .balance-container {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 16px 20px 16px;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .balance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
             font-weight: 700;
             color: #ffffff;
         }
 
+        .balance-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .balance-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 12px;
+        }
+
         .topup-button {
-            display: inline-block;
-            background: #4ade80;
-            color: #0f1419;
-            padding: 8px 20px;
-            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e40af;
+            padding: 10px 20px;
+            border-radius: 12px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
-            margin-top: 10px;
             border: none;
             cursor: pointer;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 4px;
+            margin: 0 16px 20px 16px;
+            gap: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666666;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .content {
+            padding: 0 16px;
         }
 
         .section-title {
             font-size: 16px;
-            color: #8b92a8;
-            margin-bottom: 15px;
-            font-weight: 500;
+            color: #888888;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-container {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-icon {
+            padding-left: 12px;
+            font-size: 18px;
         }
 
         .username-input {
-            width: 100%;
-            background: #1a1f2e;
-            border: 1px solid #2a3244;
-            border-radius: 12px;
-            padding: 16px;
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 8px;
             color: #ffffff;
             font-size: 16px;
-            margin-bottom: 20px;
+            outline: none;
         }
 
         .username-input::placeholder {
-            color: #525866;
-        }
-
-        .username-input:focus {
-            outline: none;
-            border-color: #7c8cff;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+            color: #555555;
         }
 
         .verify-button {
-            background: #7c8cff;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: #ffffff;
             border: none;
             border-radius: 12px;
-            padding: 16px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            white-space: nowrap;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .amount-label {
             font-size: 14px;
-            color: #8b92a8;
-            margin-bottom: 10px;
+            color: #888888;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .packages-container {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 20px;
         }
 
         .packages-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
-        .package-card {
-            background: #1a1f2e;
-            border: 2px solid #2a3244;
-            border-radius: 16px;
-            padding: 20px;
+        .package-pill {
+            background: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            border-radius: 12px;
+            padding: 10px 4px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
         }
 
-        .package-card:hover {
-            transform: translateY(-2px);
+        .package-pill.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: #3b82f6;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
         }
 
-        .package-card.selected {
-            border-color: #7c8cff;
-            background: #252b3a;
-        }
-
-        .package-emoji {
-            font-size: 36px;
-            margin-bottom: 8px;
-        }
-
-        .package-amount {
-            font-size: 24px;
+        .package-pill .amount {
+            font-size: 16px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 8px;
         }
 
-        .package-price {
+        .selected-package {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0a0a0a;
+            border-radius: 14px;
+            padding: 14px;
+            border: 2px solid #3a3a3a;
+        }
+
+        .selected-package-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selected-package-icon {
+            font-size: 24px;
+        }
+
+        .selected-package-text {
             font-size: 14px;
-            color: #8b92a8;
+            color: #888888;
+        }
+
+        .selected-package-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .selected-package-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
         }
 
         .buy-button {
             width: 100%;
-            background: linear-gradient(135deg, #7c8cff 0%, #6366f1 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: #ffffff;
             border: none;
             border-radius: 16px;
-            padding: 18px;
-            font-size: 18px;
+            padding: 16px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(124, 140, 255, 0.4);
+            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
             transition: all 0.3s;
+            margin-top: 20px;
         }
 
         .buy-button:active {
@@ -180,69 +306,41 @@
         }
 
         .buy-button:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
-        .tabs {
-            display: flex;
-            background: #1a1f2e;
-            border-radius: 16px;
-            padding: 6px;
-            margin: 20px 0;
-            gap: 6px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            color: #8b92a8;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            background: transparent;
-        }
-
-        .tab.active {
-            background: #7c8cff;
-            color: #ffffff;
-        }
-
         .leaderboard {
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .leader-item {
             display: flex;
             align-items: center;
-            background: #1a1f2e;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #2a3244;
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 2px solid #2a2a2a;
         }
 
         .leader-rank {
-            font-size: 20px;
-            font-weight: 700;
-            color: #7c8cff;
-            margin-right: 16px;
-            min-width: 40px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-right: 14px;
+            min-width: 32px;
         }
 
         .leader-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #7c8cff 0%, #6366f1 100%);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 20px;
             margin-right: 12px;
         }
 
@@ -251,14 +349,15 @@
         }
 
         .leader-name {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: #ffffff;
+            margin-bottom: 2px;
         }
 
         .leader-username {
-            font-size: 14px;
-            color: #8b92a8;
+            font-size: 13px;
+            color: #666666;
         }
 
         .leader-stats {
@@ -269,80 +368,110 @@
             font-size: 16px;
             font-weight: 700;
             color: #fbbf24;
+            margin-bottom: 2px;
         }
 
         .leader-amount {
             font-size: 12px;
-            color: #8b92a8;
+            color: #666666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666666;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>StarPayUz</h1>
+        <h1>STARPAY STARS</h1>
+        <p>mini ilova</p>
     </div>
 
-    <div class="balance-card">
-        <div class="balance-label">BALANS:</div>
+    <div class="balance-container">
+        <div class="balance-header">
+            <div class="balance-title">
+                <div class="balance-icon">💎</div>
+                <span>Balansim</span>
+            </div>
+        </div>
         <div class="balance-amount" id="balance">0 so'm</div>
-        <button class="topup-button" onclick="openTopup()">+ Hisobni to'ldirish</button>
+        <button class="topup-button" onclick="openTopup()">
+            + To'ldirish
+        </button>
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab('buy')">🎯 Bugungi</button>
-        <button class="tab" onclick="switchTab('top')">📊 Top Oylik</button>
-        <button class="tab" onclick="switchTab('leaders')">🏆 Liderlar</button>
+        <button class="tab active" onclick="switchTab('buy')">Stars olish</button>
+        <button class="tab" onclick="switchTab('leaders')">Top Liderlar</button>
     </div>
 
-    <div id="buyTab">
-        <div class="section-title">Telegram Username</div>
-        <div class="input-group">
-            <input type="text" class="username-input" id="username" placeholder="@ username" value="@username">
-            <button class="verify-button" onclick="verifyUsername()">O'zim ga</button>
+    <div class="content">
+        <div id="buyTab">
+            <div class="section-title">⭐ Telegram Stars sotib olish</div>
+            
+            <div class="amount-label">Qabul qiluvchi</div>
+            <div class="input-container">
+                <span class="input-icon">👤</span>
+                <input type="text" class="username-input" id="username" placeholder="Username kiriting" value="@username">
+                <button class="verify-button" onclick="verifyUsername()">O'zim uchun</button>
+            </div>
+
+            <div class="amount-label">Stars miqdori<span style="color: #666;"> (Min: 50)</span></div>
+            
+            <div class="packages-container">
+                <div class="packages-grid">
+                    <div class="package-pill" onclick="selectPackage(50, 10000)">
+                        <div class="amount">50</div>
+                    </div>
+                    <div class="package-pill" onclick="selectPackage(75, 14000)">
+                        <div class="amount">75</div>
+                    </div>
+                    <div class="package-pill" onclick="selectPackage(100, 18000)">
+                        <div class="amount">100</div>
+                    </div>
+                    <div class="package-pill" onclick="selectPackage(250, 45000)">
+                        <div class="amount">250</div>
+                    </div>
+                    <div class="package-pill" onclick="selectPackage(500, 85000)">
+                        <div class="amount">500</div>
+                    </div>
+                </div>
+
+                <div class="selected-package" id="selectedPackage" style="display: none;">
+                    <div class="selected-package-left">
+                        <span class="selected-package-icon">⭐</span>
+                        <div>
+                            <div class="selected-package-text">Stars miqdori</div>
+                            <div class="selected-package-amount" id="selectedAmount">0</div>
+                        </div>
+                    </div>
+                    <div class="selected-package-price" id="selectedPrice">0 so'm</div>
+                </div>
+            </div>
+
+            <button class="buy-button" id="buyBtn" onclick="buyStars()" disabled>
+                Sotib olish
+            </button>
         </div>
 
-        <div class="amount-label">Miqdori (Min: 50)</div>
-        
-        <div class="packages-grid">
-            <div class="package-card" onclick="selectPackage(50, 10000)">
-                <div class="package-emoji">⭐</div>
-                <div class="package-amount">50</div>
-                <div class="package-price">10 000 so'm</div>
-            </div>
-            <div class="package-card" onclick="selectPackage(100, 18000)">
-                <div class="package-emoji">⭐</div>
-                <div class="package-amount">100</div>
-                <div class="package-price">18 000 so'm</div>
-            </div>
-            <div class="package-card" onclick="selectPackage(250, 45000)">
-                <div class="package-emoji">⭐</div>
-                <div class="package-amount">250</div>
-                <div class="package-price">45 000 so'm</div>
-            </div>
-            <div class="package-card" onclick="selectPackage(500, 85000)">
-                <div class="package-emoji">⭐</div>
-                <div class="package-amount">500</div>
-                <div class="package-price">85 000 so'm</div>
-            </div>
+        <div id="leadersTab" style="display: none;">
+            <div class="leaderboard" id="leaderboard"></div>
         </div>
-
-        <button class="buy-button" id="buyBtn" onclick="buyStars()">Sotib olish</button>
-    </div>
-
-    <div id="topTab" style="display: none;">
-        <div class="section-title">Bo'sh</div>
-    </div>
-
-    <div id="leadersTab" style="display: none;">
-        <div class="leaderboard" id="leaderboard"></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
-        tg.setHeaderColor('#0f1419');
-        tg.setBackgroundColor('#0f1419');
+        tg.setHeaderColor('#000000');
+        tg.setBackgroundColor('#000000');
 
         let selectedAmount = 0;
         let selectedPrice = 0;
@@ -363,12 +492,17 @@
             selectedPrice = price;
             
             // Remove all selected classes
-            document.querySelectorAll('.package-card').forEach(card => {
+            document.querySelectorAll('.package-pill').forEach(card => {
                 card.classList.remove('selected');
             });
             
             // Add selected class to clicked card
-            event.target.closest('.package-card').classList.add('selected');
+            event.target.closest('.package-pill').classList.add('selected');
+            
+            // Show selected package info
+            document.getElementById('selectedPackage').style.display = 'flex';
+            document.getElementById('selectedAmount').textContent = amount;
+            document.getElementById('selectedPrice').textContent = price.toLocaleString('uz-UZ') + ' so\'m';
             
             // Enable buy button
             document.getElementById('buyBtn').disabled = false;
@@ -421,7 +555,6 @@
         function switchTab(tab) {
             // Hide all tabs
             document.getElementById('buyTab').style.display = 'none';
-            document.getElementById('topTab').style.display = 'none';
             document.getElementById('leadersTab').style.display = 'none';
 
             // Remove active class from all tabs
@@ -430,9 +563,6 @@
             // Show selected tab
             if (tab === 'buy') {
                 document.getElementById('buyTab').style.display = 'block';
-                event.target.classList.add('active');
-            } else if (tab === 'top') {
-                document.getElementById('topTab').style.display = 'block';
                 event.target.classList.add('active');
             } else if (tab === 'leaders') {
                 document.getElementById('leadersTab').style.display = 'block';
@@ -444,9 +574,11 @@
         function loadLeaders() {
             const leaderboard = document.getElementById('leaderboard');
             const leaders = [
-                {rank: 1, name: 'User 1', username: '@user1', stars: 800, amount: 160000},
-                {rank: 2, name: 'User 2', username: '@user2', stars: 473, amount: 94600},
-                {rank: 3, name: 'User 3', username: '@user3', stars: 150, amount: 30000},
+                {rank: 1, name: 'Alibek Karimov', username: '@alibek_uz', stars: 1240, amount: 248000},
+                {rank: 2, name: 'Dilshod Tursunov', username: '@dilshod_t', stars: 895, amount: 179000},
+                {rank: 3, name: 'Zarina Ahmadova', username: '@zarina_a', stars: 650, amount: 130000},
+                {rank: 4, name: 'Bekzod Ismoilov', username: '@bekzod_i', stars: 420, amount: 84000},
+                {rank: 5, name: 'Malika Rahimova', username: '@malika_r', stars: 315, amount: 63000},
             ];
 
             leaderboard.innerHTML = '';
