@@ -312,30 +312,6 @@
             <h2>Telegram Premium sotib olish</h2>
         </div>
 
-        <!-- Features List -->
-        <div class="features-list">
-            <div class="feature-item">
-                <span class="feature-icon">✨</span>
-                <span>Tezroq yuklab olish</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">📁</span>
-                <span>4 GB gacha fayllar</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">🎨</span>
-                <span>Eksklyuziv stikerlar</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">👤</span>
-                <span>Premium emoji va badge</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">💬</span>
-                <span>Kengaytirilgan chat</span>
-            </div>
-        </div>
-
         <!-- Username Input -->
         <h3 class="section-label">Qabul qiluvchi</h3>
         <div class="input-wrapper">
@@ -343,29 +319,17 @@
             <input type="text" id="username" placeholder="Username kiriting" class="input">
         </div>
 
-        <!-- Premium Cards -->
+        <!-- Premium Duration Select -->
         <h3 class="section-label">Davomiylik</h3>
-        <div class="premium-cards">
-            <div class="premium-card" onclick="selectPremium(1, 25000, this)">
-                <div class="premium-icon">💎</div>
-                <div class="premium-duration">1 oy</div>
-                <div class="premium-price">25 000 so'm</div>
-            </div>
-            <div class="premium-card" onclick="selectPremium(3, 65000, this)">
-                <div class="premium-icon">💎</div>
-                <div class="premium-duration">3 oy</div>
-                <div class="premium-price">65 000 so'm</div>
-            </div>
-            <div class="premium-card" onclick="selectPremium(6, 120000, this)">
-                <div class="premium-icon">💎</div>
-                <div class="premium-duration">6 oy</div>
-                <div class="premium-price">120 000 so'm</div>
-            </div>
-            <div class="premium-card" onclick="selectPremium(12, 220000, this)">
-                <div class="premium-icon">💎</div>
-                <div class="premium-duration">12 oy</div>
-                <div class="premium-price">220 000 so'm</div>
-            </div>
+        <div class="input-wrapper">
+            <span class="inside-icon" style="font-size: 22px;">💎</span>
+            <select id="premiumSelect" class="input" onchange="selectPremium()">
+                <option value="">Davomiylikni tanlang</option>
+                <option value="1-25000">1 oy - 25 000 so'm</option>
+                <option value="3-65000">3 oy - 65 000 so'm</option>
+                <option value="6-120000">6 oy - 120 000 so'm</option>
+                <option value="12-220000">12 oy - 220 000 so'm</option>
+            </select>
         </div>
 
         <!-- Buy Button -->
@@ -397,16 +361,20 @@
         let selectedMonths = 0;
         let selectedPrice = 0;
 
-        function selectPremium(months, price, element) {
-            selectedMonths = months;
-            selectedPrice = price;
-
-            document.querySelectorAll('.premium-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            element.classList.add('selected');
-            document.getElementById('buyBtn').disabled = false;
+        function selectPremium() {
+            const select = document.getElementById('premiumSelect');
+            const value = select.value;
+            
+            if (value) {
+                const [months, price] = value.split('-');
+                selectedMonths = parseInt(months);
+                selectedPrice = parseInt(price);
+                document.getElementById('buyBtn').disabled = false;
+            } else {
+                selectedMonths = 0;
+                selectedPrice = 0;
+                document.getElementById('buyBtn').disabled = true;
+            }
         }
 
         function buyPremium() {
