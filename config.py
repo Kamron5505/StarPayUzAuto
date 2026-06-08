@@ -31,10 +31,10 @@ PRODUCTS = {
         "color": "#FFD700",
         "packages": [
             {"amount": 50, "price": 10000},
-            {"amount": 100, "price": 18000},
-            {"amount": 250, "price": 45000},
-            {"amount": 500, "price": 85000},
-            {"amount": 1000, "price": 165000},
+            {"amount": 75, "price": 15000},
+            {"amount": 100, "price": 20000},
+            {"amount": 250, "price": 50000},
+            {"amount": 500, "price": 100000},
         ]
     },
     "premium": {
@@ -43,10 +43,9 @@ PRODUCTS = {
         "color": "#00BFFF",
         "is_premium": True,
         "packages": [
-            {"duration": 1, "price": 25000, "name": "1 oy"},
-            {"duration": 3, "price": 65000, "name": "3 oy"},
-            {"duration": 6, "price": 120000, "name": "6 oy"},
-            {"duration": 12, "price": 220000, "name": "12 oy"},
+            {"duration": 3, "price": 160000, "name": "3 oy"},
+            {"duration": 6, "price": 225000, "name": "6 oy"},
+            {"duration": 12, "price": 380000, "name": "12 oy"},
         ]
     },
     "phone": {
