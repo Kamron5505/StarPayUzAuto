@@ -1,51 +1,40 @@
-const tg = window.Telegram?.WebApp;
+// StarPayUz - Common JavaScript Functions
 
-function initTelegramApp() {
-  if (!tg) return;
-  tg.ready();
-  tg.expand();
-  document.documentElement.setAttribute("data-theme", "dark");
-  if (tg.themeParams?.bg_color) {
-    document.body.style.backgroundColor = tg.themeParams.bg_color;
-  }
-  const user = tg.initDataUnsafe?.user;
-  if (user?.username) {
-    const input = document.querySelector("[name=username]");
-    if (input && !input.value) input.value = user.username;
-  }
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+tg.setHeaderColor('#0F1419');
+tg.setBackgroundColor('#0F1419');
+
+// User balance
+let userBalance = 0;
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadUserBalance();
+});
+
+// Load user balance
+function loadUserBalance() {
+    const balanceElement = document.getElementById('balance');
+    if (balanceElement) {
+        // TODO: Load from server
+        userBalance = 0;
+        balanceElement.textContent = userBalance.toLocaleString('uz-UZ') + ' so\'m';
+    }
 }
 
-function getInitData() {
-  return tg?.initData || "";
+// Format number with spaces
+function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
-async function apiPost(path, body) {
-  const res = await fetch(path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Telegram-Init-Data": getInitData(),
-    },
-    body: JSON.stringify(body),
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.ok) {
-    throw new Error(data.error || `HTTP ${res.status}`);
-  }
-  return data;
+// Show loading
+function showLoading() {
+    tg.MainButton.showProgress();
 }
 
-function showStatus(el, message, type = "info") {
-  if (!el) return;
-  el.classList.remove("hidden", "alert-info", "alert-success", "alert-error");
-  el.classList.add(
-    type === "success" ? "alert-success" : type === "error" ? "alert-error" : "alert-info"
-  );
-  el.textContent = message;
+// Hide loading
+function hideLoading() {
+    tg.MainButton.hideProgress();
 }
-
-function closeApp() {
-  tg?.close();
-}
-
-document.addEventListener("DOMContentLoaded", initTelegramApp);

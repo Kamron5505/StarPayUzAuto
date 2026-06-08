@@ -1,458 +1,265 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elder Stars</title>
+    <title>StarPayUz - Stars</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: #1C1C1E;
-            color: #ffffff;
-            padding: 0;
-            padding-bottom: 90px;
-        }
-
-        .top-bar {
-            background: #2C2C2E;
-            padding: 12px 20px;
-            border-radius: 0 0 20px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .top-bar-left {
-            color: #3A9DFF;
-            font-size: 17px;
-            font-weight: 500;
-        }
-
-        .top-bar-title {
-            flex: 1;
-            text-align: center;
-        }
-
-        .top-bar-title h1 {
-            font-size: 17px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .top-bar-title p {
-            font-size: 13px;
-            color: #8E8E93;
-        }
-
-        .top-bar-right {
-            font-size: 20px;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, #3A9DFF 0%, #1E7FE8 100%);
-            border-radius: 20px;
-            padding: 16px 20px;
-            margin: 0 16px 16px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(58, 157, 255, 0.3);
-        }
-
-        .balance-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .balance-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .balance-info h3 {
-            font-size: 17px;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 2px;
-        }
-
-        .balance-info p {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-        }
-
-        .balance-right {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3A9DFF;
-            font-size: 24px;
-            font-weight: 400;
-            cursor: pointer;
-        }
-
-        .tabs {
-            display: flex;
-            background: #2C2C2E;
-            border-radius: 14px;
-            padding: 4px;
-            margin: 0 16px 20px 16px;
-            gap: 4px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 600;
-            color: #8E8E93;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            background: transparent;
-        }
-
-        .tab.active {
-            background: #3A9DFF;
-            color: #ffffff;
-        }
-
-        .content {
-            padding: 0 16px;
-        }
-
-        .section-title {
-            font-size: 17px;
-            color: #ffffff;
-            margin-bottom: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .label {
-            font-size: 15px;
-            color: #8E8E93;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .input-group {
-            background: #2C2C2E;
-            border: 1.5px solid #3A3A3C;
-            border-radius: 14px;
-            padding: 4px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .input-icon {
-            padding-left: 12px;
-            font-size: 20px;
-        }
-
-        .input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px 8px;
-            color: #ffffff;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .input::placeholder {
-            color: #636366;
-        }
-
-        .input-button {
-            background: #3A9DFF;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .amount-box {
-            background: #2C2C2E;
-            border: 1.5px solid #3A3A3C;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .amount-display {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .amount-display-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .amount-display-icon {
-            font-size: 24px;
-        }
-
-        .amount-display-text {
-            font-size: 15px;
-            color: #8E8E93;
-        }
-
-        .amount-display-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #3A9DFF;
-        }
-
-        .buttons-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-        }
-
-        .amount-button {
-            background: #3A3A3C;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 8px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .amount-button.selected {
-            background: #3A9DFF;
-            box-shadow: 0 4px 12px rgba(58, 157, 255, 0.4);
-        }
-
-        .buy-button {
-            width: 100%;
-            background: #3A9DFF;
-            color: #ffffff;
-            border: none;
-            border-radius: 14px;
-            padding: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(58, 157, 255, 0.4);
-            transition: all 0.2s;
-        }
-
-        .buy-button:active {
-            transform: scale(0.98);
-        }
-
-        .buy-button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #2C2C2E;
-            border-top: 0.5px solid #3A3A3C;
-            padding: 8px 16px 20px 16px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            padding: 4px 12px;
-        }
-
-        .nav-item.active .nav-icon {
-            color: #3A9DFF;
-        }
-
-        .nav-item.active .nav-label {
-            color: #3A9DFF;
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            color: #8E8E93;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            color: #8E8E93;
-            font-weight: 500;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+<style>
+    body {
+        margin: auto;
+        text-align: center;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 35px;
+    }
+
+    .header-left__image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .add-button {
+        width: 30px;
+        height: 30px;
+
+        border: none;
+        border-radius: 50%;
+
+        background: #3B82F6;
+        color: #fff;
+
+        font-size: 23px;
+        font-weight: 300;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 0 15px rgba(59, 130, 246, .4),
+            0 8px 20px rgba(59, 130, 246, .25);
+
+        transition: all .3s ease;
+    }
+
+    .add-button:hover {
+        transform: translateY(-2px) scale(1.05);
+
+        box-shadow:
+            0 0 25px rgba(59, 130, 246, .6),
+            0 10px 25px rgba(59, 130, 246, .35);
+    }
+
+    .add-button:active {
+        transform: scale(.95);
+    }
+
+    .header-right {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .balance-badge {
+        color: white;
+        font-weight: 600;
+        border: 2px solid #3B82F6;
+        padding: 5px 8px;
+        border-radius: 30px;
+        font-size: 14px;
+        background-color: #031632;
+
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .balance-badge:hover {
+        background-color: #3B82F6;
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 0 15px rgba(59, 130, 246, .4),
+            0 4px 12px rgba(59, 130, 246, .3);
+    }
+
+    .balance-badge:active {
+        transform: scale(0.96);
+    }
+
+    .tabs {
+        background-color: rgb(58, 58, 65);
+        padding: 7px 0;
+        border-radius: 50px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .tab {
+        color: #9CA3AF;
+        background: transparent;
+        border: none;
+
+        font-weight: 700;
+        font-size: 15px;
+
+        padding: 10px 10px;
+        border-radius: 50px;
+
+        cursor: pointer;
+        transition: all .3s ease;
+    }
+
+    /* Наведение */
+    .tab:hover {
+        color: #fff;
+      background: #3B82F6;
+    }
+
+    .tab.active {
+        color: #fff;
+
+        background: #3B82F6;
+
+        box-shadow:
+            0 0 15px rgba(59, 130, 246, .35),
+            0 4px 12px rgba(59, 130, 246, .25);
+    }
+
+    /* Нажатие */
+    .tab:active {
+        transform: scale(.97);
+    }
+    .page-title{
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+    }
+    .page-title h2{
+        color: #0d5ece;
+    }
+</style>
+
 <body>
-    <div class="top-bar">
-        <div class="top-bar-left">Yopish</div>
-        <div class="top-bar-title">
-            <h1>ELDER STARS</h1>
-            <p>mini ilova</p>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <a href="/">
+                <img src="./images/logo.png" alt="" class="header-left__image">
+            </a>
         </div>
-        <div class="top-bar-right">⋯</div>
-    </div>
-
-    <div class="balance-card">
-        <div class="balance-left">
-            <div class="balance-icon">💎</div>
-            <div class="balance-info">
-                <h3>Elder Stars</h3>
-                <p id="balance">0 so'm</p>
-            </div>
+        <div class="header-right">
+            <div class="balance-badge" id="balance">0 so'm</div>
+            <button class="add-button" onclick="openTopup()">+</button>
         </div>
-        <div class="balance-right" onclick="openTopup()">+</div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" onclick="switchTab('stars')">Stars olish</button>
-        <button class="tab" onclick="switchTab('premium')">Premium olish</button>
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab">Stars olish</button>
+            <button class="tab" onclick="openPremium()">Premium olish</button>
+        </div>
     </div>
 
+    <!-- Content -->
     <div class="content">
-        <div id="starsTab">
-            <div class="section-title">⭐ Telegram Stars sotib olish</div>
-            
-            <div class="label">Qabul qiluvchi</div>
-            <div class="input-group">
-                <span class="input-icon">👤</span>
-                <input type="text" class="input" id="username" placeholder="Username kiriting">
-                <button class="input-button" onclick="setMyUsername()">O'zim uchun</button>
-            </div>
-
-            <div class="label">Stars miqdori</div>
-            
-            <div class="amount-box">
-                <div class="amount-display">
-                    <div class="amount-display-left">
-                        <span class="amount-display-icon">⭐</span>
-                        <span class="amount-display-text">Stars miqdori</span>
-                    </div>
-                    <div class="amount-display-value" id="displayAmount">0 so'm</div>
-                </div>
-
-                <div class="buttons-row">
-                    <button class="amount-button" onclick="selectAmount(50, 10000)">50</button>
-                    <button class="amount-button" onclick="selectAmount(75, 14000)">75</button>
-                    <button class="amount-button" onclick="selectAmount(100, 18000)">100</button>
-                    <button class="amount-button" onclick="selectAmount(250, 45000)">250</button>
-                    <button class="amount-button" onclick="selectAmount(500, 85000)">500</button>
-                </div>
-            </div>
-
-            <button class="buy-button" id="buyBtn" onclick="buyStars()" disabled>Sotib olish</button>
+        <div class="page-title">
+                <img src="./images/star.webp" alt="" style="width: 7%; height: 7%;">
+            <h2>Telegram Stars sotib olish</h2>
         </div>
 
-        <div id="premiumTab" style="display: none;">
-            <div class="section-title">💎 Telegram Premium sotib olish</div>
-            <p style="color: #8E8E93; text-align: center; padding: 40px 20px;">
-                Premium xizmat tez orada...
-            </p>
+        <!-- Username Input -->
+        <div class="section-label">Qabul qiluvchi</div>
+        <div class="input-group">
+            <span class="input-icon">👤</span>
+            <input type="text" class="input" id="username" placeholder="Username kiriting">
+            <button class="input-button" onclick="setMyUsername()">O'zim uchun</button>
         </div>
+
+        <!-- Amount Selection -->
+        <div class="section-label">Stars miqdori</div>
+        <div class="amount-box">
+            <div class="amount-display">
+                <div class="amount-display-left">
+                    <span class="amount-icon">📝</span>
+                    <span class="amount-label">Stars miqdori</span>
+                </div>
+                <div class="amount-value" id="displayAmount">0 so'm</div>
+            </div>
+
+            <div class="buttons-row">
+                <button class="amount-btn" onclick="selectAmount(50, 10000)">50</button>
+                <button class="amount-btn" onclick="selectAmount(75, 14000)">75</button>
+                <button class="amount-btn" onclick="selectAmount(100, 18000)">100</button>
+                <button class="amount-btn" onclick="selectAmount(250, 45000)">250</button>
+                <button class="amount-btn" onclick="selectAmount(500, 85000)">500</button>
+            </div>
+        </div>
+
+        <!-- Buy Button -->
+        <button class="btn-primary" id="buyBtn" onclick="buyStars()" disabled>Sotib olish</button>
     </div>
 
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Menu</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="openGifts()">
             <div class="nav-icon">🎁</div>
             <div class="nav-label">Gifts</div>
         </div>
-        <div class="nav-item">
-            <div class="nav-icon">🖼️</div>
-            <div class="nav-label">NFT</div>
+        <div class="nav-item" onclick="openReyting()">
+            <div class="nav-icon">🏆</div>
+            <div class="nav-label">Reyting</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="openProfile()">
             <div class="nav-icon">👤</div>
             <div class="nav-label">Profil</div>
         </div>
     </div>
 
+    <script src="js/common.js"></script>
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-        tg.setHeaderColor('#1C1C1E');
-        tg.setBackgroundColor('#1C1C1E');
-
         let selectedStars = 0;
         let selectedPrice = 0;
-        let userBalance = 0;
-
-        const initData = tg.initDataUnsafe;
-        if (initData.user) {
-            document.getElementById('username').value = '@' + (initData.user.username || '');
-        }
-
-        userBalance = 0;
-        document.getElementById('balance').textContent = userBalance.toLocaleString('uz-UZ') + ' so\'m';
 
         function selectAmount(stars, price) {
             selectedStars = stars;
             selectedPrice = price;
-            
-            document.querySelectorAll('.amount-button').forEach(btn => {
+
+            document.querySelectorAll('.amount-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            
+
             event.target.classList.add('selected');
-            
+
             document.getElementById('displayAmount').textContent = price.toLocaleString('uz-UZ') + ' so\'m';
             document.getElementById('buyBtn').disabled = false;
         }
 
         function setMyUsername() {
+            const initData = tg.initDataUnsafe;
             if (initData.user && initData.user.username) {
                 document.getElementById('username').value = '@' + initData.user.username;
                 tg.showPopup({
-                    title: '✅',
-                    message: 'Username o\'rnatildi',
-                    buttons: [{type: 'ok'}]
+                    title: '✅ Tasdiqlandi',
+                    message: 'Sizning username o\'rnatildi',
+                    buttons: [{ type: 'ok' }]
                 });
             } else {
                 tg.showAlert('Username topilmadi');
@@ -471,11 +278,6 @@
                 return;
             }
 
-            if (userBalance < selectedPrice) {
-                tg.showAlert('Balans yetarli emas!');
-                return;
-            }
-
             tg.sendData(JSON.stringify({
                 action: 'buy_stars',
                 amount: selectedStars,
@@ -486,24 +288,26 @@
             tg.close();
         }
 
-        function openTopup() {
-            tg.showAlert('Hisobni to\'ldirish tez orada...');
+        function openPremium() {
+            window.location.href = 'premium.html';
         }
 
-        function switchTab(tab) {
-            document.getElementById('starsTab').style.display = 'none';
-            document.getElementById('premiumTab').style.display = 'none';
+        function openTopup() {
+            window.location.href = 'topup.html';
+        }
 
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        function openGifts() {
+            window.location.href = 'gift.html';
+        }
 
-            if (tab === 'stars') {
-                document.getElementById('starsTab').style.display = 'block';
-                document.querySelectorAll('.tab')[0].classList.add('active');
-            } else {
-                document.getElementById('premiumTab').style.display = 'block';
-                document.querySelectorAll('.tab')[1].classList.add('active');
-            }
+        function openReyting() {
+            window.location.href = 'index.html';
+        }
+
+        function openProfile() {
+            window.location.href = 'index.html';
         }
     </script>
 </body>
+
 </html>

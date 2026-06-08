@@ -2,27 +2,111 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisobni to'ldirish - StarPayUz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StarPayUz - Hisobni to'ldirish</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f1419;
-            color: #ffffff;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        h1 { color: #7c8cff; margin-bottom: 20px; }
-        p { color: #8b92a8; font-size: 18px; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>✨ Hisobni to'ldirish</h1>
-    <p>Tez orada...</p>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-circle">⭐</div>
+            <div class="logo-text">StarPayUz</div>
+        </div>
+        <div class="header-right">
+            <div class="balance-badge" id="balance">0 so'm</div>
+            <button class="add-button" onclick="window.location.reload()">↻</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" style="margin-top: 24px;">
+        <div class="page-title">
+            <span>💰</span>
+            <span>Hisobni to'ldirish</span>
+        </div>
+
+        <div class="referral-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 64px; margin-bottom: 16px;">💳</div>
+            <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; line-height: 1.6;">
+                Hisobni to'ldirish funksiyasi tez orada qo'shiladi.
+                <br><br>
+                Hozircha admin bilan bog'laning:
+            </p>
+            <button class="btn-primary" onclick="contactAdmin()">
+                💬 Admin bilan bog'lanish
+            </button>
+        </div>
+
+        <!-- Payment Methods (Coming Soon) -->
+        <div class="section-label" style="margin-top: 32px;">To'lov usullari</div>
+        <div class="profile-section">
+            <div class="profile-item" style="opacity: 0.5;">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">💳</span>
+                    <span class="profile-item-text">Bank kartasi</span>
+                </div>
+                <span style="background: var(--bg-secondary); color: var(--text-secondary); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">Tez orada</span>
+            </div>
+            <div class="profile-item" style="opacity: 0.5;">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">📱</span>
+                    <span class="profile-item-text">Click / Payme</span>
+                </div>
+                <span style="background: var(--bg-secondary); color: var(--text-secondary); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">Tez orada</span>
+            </div>
+            <div class="profile-item" style="opacity: 0.5;">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">⭐</span>
+                    <span class="profile-item-text">Telegram Stars</span>
+                </div>
+                <span style="background: var(--bg-secondary); color: var(--text-secondary); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">Tez orada</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openStars()">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Menu</div>
+        </div>
+        <div class="nav-item" onclick="openGifts()">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Gifts</div>
+        </div>
+        <div class="nav-item" onclick="openReyting()">
+            <div class="nav-icon">🏆</div>
+            <div class="nav-label">Reyting</div>
+        </div>
+        <div class="nav-item" onclick="openProfile()">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
     <script>
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
+        function contactAdmin() {
+            tg.openTelegramLink('https://t.me/StarPayUz_Admin');
+        }
+
+        function openStars() {
+            window.location.href = 'stars.html';
+        }
+
+        function openGifts() {
+            window.location.href = 'gift.html';
+        }
+
+        function openReyting() {
+            window.location.href = 'index.html';
+        }
+
+        function openProfile() {
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 </html>

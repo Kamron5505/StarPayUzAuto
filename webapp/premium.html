@@ -3,336 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium olish - StarPayUz</title>
+    <title>StarPayUz - Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0f1419;
-            color: #ffffff;
-            padding: 20px;
-            padding-bottom: 100px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #7c8cff;
-            margin-bottom: 10px;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, #1a1f2e 0%, #252b3a 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #2a3244;
-        }
-
-        .balance-label {
-            font-size: 14px;
-            color: #8b92a8;
-            margin-bottom: 8px;
-        }
-
-        .balance-amount {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .topup-button {
-            display: inline-block;
-            background: #4ade80;
-            color: #0f1419;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .section-title {
-            font-size: 16px;
-            color: #8b92a8;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .username-input {
-            width: 100%;
-            background: #1a1f2e;
-            border: 1px solid #2a3244;
-            border-radius: 12px;
-            padding: 16px;
-            color: #ffffff;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .username-input::placeholder {
-            color: #525866;
-        }
-
-        .username-input:focus {
-            outline: none;
-            border-color: #7c8cff;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .verify-button {
-            background: #7c8cff;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            padding: 16px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .amount-label {
-            font-size: 14px;
-            color: #8b92a8;
-            margin-bottom: 10px;
-        }
-
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .package-card {
-            background: #1a1f2e;
-            border: 2px solid #2a3244;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .package-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .package-card.selected {
-            border-color: #60a5fa;
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-        }
-
-        .package-card.admin {
-            border-color: #fbbf24;
-            background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
-        }
-
-        .admin-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #fbbf24;
-            color: #0f1419;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .package-emoji {
-            font-size: 36px;
-            margin-bottom: 8px;
-        }
-
-        .package-duration {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
-
-        .package-price {
-            font-size: 14px;
-            color: #8b92a8;
-        }
-
-        .package-oldprice {
-            text-decoration: line-through;
-            font-size: 12px;
-            color: #525866;
-            margin-right: 4px;
-        }
-
-        .buy-button {
-            width: 100%;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 16px;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
-            transition: all 0.3s;
-        }
-
-        .buy-button:active {
-            transform: scale(0.98);
-        }
-
-        .buy-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
-        <h1>StarPayUz</h1>
-    </div>
-
-    <div class="balance-card">
-        <div class="balance-label">BALANS:</div>
-        <div class="balance-amount" id="balance">0 so'm</div>
-        <button class="topup-button" onclick="openTopup()">+ Hisobni to'ldirish</button>
-    </div>
-
-    <div class="section-title">Telegram Username</div>
-    <div class="input-group">
-        <input type="text" class="username-input" id="username" placeholder="@ username" value="@username">
-        <button class="verify-button" onclick="verifyUsername()">O'zimga</button>
-    </div>
-
-    <div class="amount-label">Muddatni tanlang</div>
-    
-    <div class="packages-grid">
-        <div class="package-card admin" onclick="selectPackage(1, 25000)">
-            <span class="admin-badge">Admin orqali</span>
-            <div class="package-emoji">💎</div>
-            <div class="package-duration">1 Oy</div>
-            <div class="package-price">25 000 so'm</div>
+        <div class="header-left">
+            <div class="logo-circle">⭐</div>
+            <div class="logo-text">StarPayUz</div>
         </div>
-        <div class="package-card" onclick="selectPackage(3, 65000)">
-            <div class="package-emoji">💎</div>
-            <div class="package-duration">3 Oy</div>
-            <div class="package-price">65 000 so'm</div>
+        <div class="header-right">
+            <div class="balance-badge" id="balance">0 so'm</div>
+            <button class="add-button" onclick="openTopup()">+</button>
         </div>
-        <div class="package-card selected" onclick="selectPackage(6, 120000)">
-            <div class="package-emoji">💎</div>
-            <div class="package-duration">6 Oy</div>
-            <div class="package-price">
-                <span class="package-oldprice">150 000</span>
-                120 000 so'm
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab" onclick="openStars()">Stars olish</button>
+            <button class="tab active">Premium olish</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="page-title">
+            <span>💎</span>
+            <span>Telegram Premium sotib olish</span>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; line-height: 1.6;">
+            Premium obuna bilan qo'shimcha imkoniyatlarga ega bo'ling:
+            <br><br>
+            ✨ Tezroq yuklab olish<br>
+            📁 4 GB gacha fayllar<br>
+            🎨 Eksklyuziv stikerlar<br>
+            👤 Premium emoji va badge<br>
+            💬 Kengaytirilgan chat
+        </p>
+
+        <!-- Username Input -->
+        <div class="section-label">Qabul qiluvchi</div>
+        <div class="input-group">
+            <span class="input-icon">👤</span>
+            <input type="text" class="input" id="username" placeholder="Username kiriting">
+            <button class="input-button" onclick="setMyUsername()">O'zim uchun</button>
+        </div>
+
+        <!-- Premium Packages -->
+        <div class="section-label">Davomiylik</div>
+        <div class="gift-cards-grid" style="grid-template-columns: repeat(2, 1fr); gap: 16px;">
+            <div class="gift-card" onclick="selectPremium(1, 25000)" style="padding: 24px 16px;">
+                <div class="gift-card-emoji">💎</div>
+                <div class="gift-card-name">1 oy</div>
+                <div class="gift-card-price">25 000 so'm</div>
+            </div>
+
+            <div class="gift-card" onclick="selectPremium(3, 65000)" style="padding: 24px 16px;">
+                <div class="gift-card-emoji">💎</div>
+                <div class="gift-card-name">3 oy</div>
+                <div class="gift-card-price">65 000 so'm</div>
+            </div>
+
+            <div class="gift-card" onclick="selectPremium(6, 120000)" style="padding: 24px 16px;">
+                <div class="gift-card-emoji">💎</div>
+                <div class="gift-card-name">6 oy</div>
+                <div class="gift-card-price">120 000 so'm</div>
+            </div>
+
+            <div class="gift-card" onclick="selectPremium(12, 220000)" style="padding: 24px 16px;">
+                <div class="gift-card-emoji">💎</div>
+                <div class="gift-card-name">12 oy</div>
+                <div class="gift-card-price">220 000 so'm</div>
             </div>
         </div>
-        <div class="package-card" onclick="selectPackage(12, 220000)">
-            <div class="package-emoji">💎</div>
-            <div class="package-duration">12 Oy</div>
-            <div class="package-price">
-                <span class="package-oldprice">300 000</span>
-                220 000 so'm
-            </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openStars()">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Menu</div>
+        </div>
+        <div class="nav-item" onclick="openGifts()">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Gifts</div>
+        </div>
+        <div class="nav-item" onclick="openReyting()">
+            <div class="nav-icon">🏆</div>
+            <div class="nav-label">Reyting</div>
+        </div>
+        <div class="nav-item" onclick="openProfile()">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
         </div>
     </div>
 
-    <button class="buy-button" id="buyBtn" onclick="buyPremium()">Premium olish</button>
-
+    <script src="js/common.js"></script>
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-        tg.setHeaderColor('#0f1419');
-        tg.setBackgroundColor('#0f1419');
-
-        let selectedDuration = 6; // Default selected
-        let selectedPrice = 120000;
-        let userBalance = 0;
-
-        // Get user data
-        const initData = tg.initDataUnsafe;
-        if (initData.user) {
-            document.getElementById('username').value = '@' + (initData.user.username || 'username');
-        }
-
-        // Mock balance
-        userBalance = 150000;
-        document.getElementById('balance').textContent = userBalance.toLocaleString('uz-UZ') + ' so\'m';
-
-        function selectPackage(duration, price) {
-            selectedDuration = duration;
-            selectedPrice = price;
-            
-            // Remove all selected classes
-            document.querySelectorAll('.package-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked card
-            event.target.closest('.package-card').classList.add('selected');
-            
-            // Enable buy button
-            document.getElementById('buyBtn').disabled = false;
-        }
-
-        function buyPremium() {
-            const username = document.getElementById('username').value;
-            if (!username || username === '@') {
-                tg.showAlert('Iltimos, username kiriting!');
-                return;
-            }
-
-            if (userBalance < selectedPrice) {
-                tg.showAlert('Balans yetarli emas! Hisobni to\'ldiring.');
-                return;
-            }
-
-            // Send data back to bot
-            tg.sendData(JSON.stringify({
-                action: 'buy_premium',
-                duration: selectedDuration,
-                price: selectedPrice,
-                username: username
-            }));
-
-            tg.close();
-        }
-
-        function verifyUsername() {
+        function setMyUsername() {
+            const initData = tg.initDataUnsafe;
             if (initData.user && initData.user.username) {
                 document.getElementById('username').value = '@' + initData.user.username;
                 tg.showPopup({
-                    title: 'Tasdiqlandi',
+                    title: '✅ Tasdiqlandi',
                     message: 'Sizning username o\'rnatildi',
                     buttons: [{type: 'ok'}]
                 });
+            } else {
+                tg.showAlert('Username topilmadi');
             }
         }
 
+        function selectPremium(months, price) {
+            const username = document.getElementById('username').value;
+            if (!username || username === '@') {
+                tg.showAlert('Iltimos, avval username kiriting!');
+                return;
+            }
+
+            tg.showConfirm(
+                `${months} oylik Premium obunasini ${price.toLocaleString('uz-UZ')} so'mga sotib olasizmi?`,
+                (confirmed) => {
+                    if (confirmed) {
+                        tg.sendData(JSON.stringify({
+                            action: 'buy_premium',
+                            duration: months,
+                            price: price,
+                            username: username
+                        }));
+                        tg.close();
+                    }
+                }
+            );
+        }
+
+        function openStars() {
+            window.location.href = 'stars.html';
+        }
+
+        function openGifts() {
+            window.location.href = 'gift.html';
+        }
+
+        function openReyting() {
+            window.location.href = 'index.html';
+        }
+
+        function openProfile() {
+            window.location.href = 'index.html';
+        }
+
         function openTopup() {
-            tg.close();
+            window.location.href = 'topup.html';
         }
     </script>
 </body>

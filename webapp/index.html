@@ -2,410 +2,228 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarPayUz - Magazin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StarPayUz - Profil</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 16px;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .balance {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .balance-amount {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 8px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .menu-item {
-            background: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            padding: 20px 16px;
-            border-radius: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: none;
-            font-size: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu-item:active {
-            transform: scale(0.95);
-        }
-
-        .menu-item.premium {
-            background: linear-gradient(135deg, #00BFFF 0%, #1E90FF 100%);
-        }
-
-        .menu-item.stars {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        }
-
-        .menu-item.phone {
-            background: linear-gradient(135deg, #808080 0%, #696969 100%);
-        }
-
-        .menu-item.gift {
-            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-        }
-
-        .menu-item-emoji {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .menu-item-text {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .full-width-button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: transform 0.2s;
-        }
-
-        .full-width-button:active {
-            transform: scale(0.98);
-        }
-
-        .orders-button {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-        }
-
-        .referrals-button {
-            background: linear-gradient(135deg, #4169E1 0%, #6495ED 100%);
-            color: white;
-        }
-
-        .account-button {
-            background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
-            color: white;
-        }
-
-        .support-button {
-            background: linear-gradient(135deg, #696969 0%, #808080 100%);
-            color: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            padding: 16px;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--tg-theme-bg-color, #ffffff);
-            border-radius: 16px;
-            padding: 24px;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-
-        .modal-header {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .package-item {
-            background: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .package-item:active {
-            transform: scale(0.98);
-        }
-
-        .close-button {
-            background: #ff4444;
-            color: white;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            width: 100%;
-            font-size: 16px;
-            margin-top: 16px;
-            cursor: pointer;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--tg-theme-bg-color, #ffffff);
-            border-top: 1px solid var(--tg-theme-hint-color, #cccccc);
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            padding: 8px;
-            gap: 8px;
-        }
-
-        .nav-button {
-            padding: 12px;
-            text-align: center;
-            background: transparent;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .nav-text {
-            display: block;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="header">
-        <div class="logo">⚡ StarPayUz</div>
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-name" id="profileName">StarPayUz — Admin</div>
+        <div class="profile-username" id="profileUsername">@StarPayUzAdmin</div>
     </div>
 
-    <div class="balance">
-        <div>💰 Balans</div>
-        <div class="balance-amount" id="balance">0 so'm</div>
-        <div style="margin-top: 8px;">👥 Referallar: <span id="referrals">0</span> ta</div>
-    </div>
+    <!-- Weekly Stats Card -->
+    <div class="content">
+        <div class="referral-card" style="margin-bottom: 24px;">
+            <div class="referral-title">📊 HAFTALIK SAVDO</div>
+            <div style="display: flex; justify-content: space-around; margin: 16px 0;">
+                <div style="text-align: center;">
+                    <div style="font-size: 48px;">🥤</div>
+                    <div style="font-size: 18px; font-weight: 700; color: var(--blue-primary); margin-top: 8px;">0 so'm</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px;">🤝</div>
+                    <div style="font-size: 18px; font-weight: 700; color: var(--blue-primary); margin-top: 8px;">0 so'm</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px;">🍦</div>
+                    <div style="font-size: 18px; font-weight: 700; color: var(--blue-primary); margin-top: 8px;">0 so'm</div>
+                </div>
+            </div>
+            <div style="color: var(--text-secondary); font-size: 13px; text-align: center;">
+                Kundalik: 0 so'm / Jami: 0 so'm
+            </div>
+            <div style="color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 4px;">
+                Haftalik: 2 400 000 so'm
+            </div>
+            <button class="btn-primary" style="margin-top: 16px; font-size: 15px; padding: 14px;">
+                ✅ ASOSIY
+            </button>
+        </div>
 
-    <div class="menu-grid">
-        <button class="menu-item stars" onclick="showStars()">
-            <span class="menu-item-emoji">⭐</span>
-            <span class="menu-item-text">Stars olish</span>
-        </button>
-        <button class="menu-item premium" onclick="showPremium()">
-            <span class="menu-item-emoji">💎</span>
-            <span class="menu-item-text">Premium olish</span>
-        </button>
-        <button class="menu-item phone" onclick="showPhone()">
-            <span class="menu-item-emoji">📱</span>
-            <span class="menu-item-text">Nomer olish</span>
-        </button>
-        <button class="menu-item gift" onclick="showGift()">
-            <span class="menu-item-emoji">🎁</span>
-            <span class="menu-item-text">Gift olish</span>
-        </button>
-    </div>
+        <!-- ASOSIY Section -->
+        <div class="section-label" style="color: var(--blue-primary); margin-bottom: 12px;">
+            📊 ASOSIY
+        </div>
+        <div class="profile-section">
+            <div class="profile-item" onclick="openGiftlarim()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">🎁</span>
+                    <span class="profile-item-text">Giftlarim</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+            <div class="profile-item" onclick="openTakliflarim()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">👥</span>
+                    <span class="profile-item-text">Takliflarim</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+            <div class="profile-item" onclick="openTasks()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">📝</span>
+                    <span class="profile-item-text">Taskr</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+        </div>
 
-    <button class="full-width-button orders-button" onclick="showOrders()">
-        📦 Buyurtmalarim
-    </button>
+        <!-- SOZLAMALAR Section -->
+        <div class="section-label" style="color: var(--blue-primary); margin-top: 20px; margin-bottom: 12px;">
+            ⚙️ SOZLAMALAR
+        </div>
+        <div class="profile-section">
+            <div class="profile-item">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">🌙</span>
+                    <span class="profile-item-text">Tun rejimi</span>
+                </div>
+                <div class="toggle-switch active" onclick="toggleDarkMode(event)">
+                    <div class="toggle-switch-circle"></div>
+                </div>
+            </div>
+            <div class="profile-item" onclick="openNotifications()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">🔔</span>
+                    <span class="profile-item-text">Qo'llab-quvvatlash</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+            <div class="profile-item" onclick="openLanguage()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">📱</span>
+                    <span class="profile-item-text">Yangiliklar kanali</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+            <div class="profile-item" onclick="openDailyBonus()">
+                <div class="profile-item-left">
+                    <span class="profile-item-icon">✨</span>
+                    <span class="profile-item-text">Savdo gunlari</span>
+                </div>
+                <span class="profile-item-right">›</span>
+            </div>
+        </div>
 
-    <button class="full-width-button referrals-button" onclick="showReferrals()">
-        👥 Referallar
-    </button>
+        <!-- REFERRAL Section -->
+        <div class="referral-card" style="margin-top: 24px;">
+            <div class="referral-title">👥 REFERRAL</div>
+            <div class="referral-text">
+                Do'stlaringizni taklif qiling va ullarning xaridlaridan bonus oling!
+            </div>
+            
+            <div class="referral-items">
+                <div class="referral-item">
+                    <div class="referral-item-left">
+                        <span class="referral-item-icon">⭐</span>
+                        <span class="referral-item-name">Telegram Stars</span>
+                    </div>
+                    <div class="referral-item-value">+300 so'm</div>
+                </div>
+                
+                <div class="referral-item">
+                    <div class="referral-item-left">
+                        <span class="referral-item-icon">💎</span>
+                        <span class="referral-item-name">Telegram Premium</span>
+                    </div>
+                    <div class="referral-item-value">+500 so'm</div>
+                </div>
+            </div>
 
-    <button class="full-width-button account-button" onclick="showAccount()">
-        ✨ Hisobni to'ldirish
-    </button>
-
-    <button class="full-width-button support-button" onclick="showSupport()">
-        🔒 Qo'llab-quvvatlash
-    </button>
-
-    <!-- Modals -->
-    <div id="starsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">⭐ Stars olish</div>
-            <div id="starsPackages"></div>
-            <button class="close-button" onclick="closeModal('starsModal')">Yopish</button>
+            <button class="referral-button" onclick="shareReferral()">
+                <span>🔗</span>
+                <span>Do'stlarni taklif qilish</span>
+            </button>
         </div>
     </div>
 
-    <div id="premiumModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">💎 Premium olish</div>
-            <div id="premiumPackages"></div>
-            <button class="close-button" onclick="closeModal('premiumModal')">Yopish</button>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openStars()">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Menu</div>
+        </div>
+        <div class="nav-item" onclick="openGifts()">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Gifts</div>
+        </div>
+        <div class="nav-item" onclick="openReyting()">
+            <div class="nav-icon">🏆</div>
+            <div class="nav-label">Reyting</div>
+        </div>
+        <div class="nav-item active">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
         </div>
     </div>
 
+    <div class="footer-text">@StarPayUzBot</div>
+
+    <script src="js/common.js"></script>
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        // Load user profile
+        const initData = tg.initDataUnsafe;
+        if (initData.user) {
+            document.getElementById('profileName').textContent = initData.user.first_name + ' — Admin';
+            if (initData.user.username) {
+                document.getElementById('profileUsername').textContent = '@' + initData.user.username;
+            }
+        }
 
-        // Mock data for demonstration
-        const userData = {
-            balance: 150000,
-            referrals: 5
-        };
+        function toggleDarkMode(event) {
+            event.stopPropagation();
+            const toggle = event.currentTarget;
+            toggle.classList.toggle('active');
+            tg.showAlert('Tun rejimi faol!');
+        }
 
-        const starsPackages = [
-            { amount: 50, price: 10000 },
-            { amount: 100, price: 18000 },
-            { amount: 250, price: 45000 },
-            { amount: 500, price: 85000 },
-            { amount: 1000, price: 165000 }
-        ];
-
-        const premiumPackages = [
-            { duration: 1, price: 25000, name: '1 oy' },
-            { duration: 3, price: 65000, name: '3 oy' },
-            { duration: 6, price: 120000, name: '6 oy' },
-            { duration: 12, price: 220000, name: '12 oy' }
-        ];
-
-        // Initialize
-        document.getElementById('balance').textContent = userData.balance.toLocaleString('uz-UZ') + ' so\'m';
-        document.getElementById('referrals').textContent = userData.referrals;
-
-        function showStars() {
-            const container = document.getElementById('starsPackages');
-            container.innerHTML = '';
+        function shareReferral() {
+            const botUsername = 'starpayuzauto_bot';
+            const userId = initData.user?.id || '123456';
+            const referralLink = `https://t.me/${botUsername}?start=${userId}`;
             
-            starsPackages.forEach(pkg => {
-                const div = document.createElement('div');
-                div.className = 'package-item';
-                div.innerHTML = `
-                    <span>⭐ ${pkg.amount} Stars</span>
-                    <span>${pkg.price.toLocaleString('uz-UZ')} so'm</span>
-                `;
-                div.onclick = () => buyStars(pkg.amount, pkg.price);
-                container.appendChild(div);
-            });
-            
-            document.getElementById('starsModal').style.display = 'block';
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent('StarPayUz botiga qo\'shiling!')}`);
         }
 
-        function showPremium() {
-            const container = document.getElementById('premiumPackages');
-            container.innerHTML = '';
-            
-            premiumPackages.forEach(pkg => {
-                const div = document.createElement('div');
-                div.className = 'package-item';
-                div.innerHTML = `
-                    <span>💎 Premium ${pkg.name}</span>
-                    <span>${pkg.price.toLocaleString('uz-UZ')} so'm</span>
-                `;
-                div.onclick = () => buyPremium(pkg.duration, pkg.price);
-                container.appendChild(div);
-            });
-            
-            document.getElementById('premiumModal').style.display = 'block';
+        function openStars() {
+            window.location.href = 'stars.html';
         }
 
-        function showPhone() {
-            tg.showAlert('📱 Virtual raqamlar tez orada!');
+        function openGifts() {
+            window.location.href = 'gift.html';
         }
 
-        function showGift() {
-            tg.showAlert('🎁 Gift sovg\'alar tez orada!');
+        function openReyting() {
+            tg.showAlert('Reyting sahifasi tez orada...');
         }
 
-        function showOrders() {
-            tg.sendData(JSON.stringify({ action: 'orders' }));
+        function openGiftlarim() {
+            tg.showAlert('Giftlarim sahifasi tez orada...');
         }
 
-        function showReferrals() {
-            tg.sendData(JSON.stringify({ action: 'referrals' }));
+        function openTakliflarim() {
+            tg.showAlert('Takliflarim sahifasi tez orada...');
         }
 
-        function showAccount() {
-            tg.sendData(JSON.stringify({ action: 'topup' }));
+        function openTasks() {
+            tg.showAlert('Taskr sahifasi tez orada...');
         }
 
-        function showSupport() {
-            tg.sendData(JSON.stringify({ action: 'support' }));
+        function openNotifications() {
+            tg.openTelegramLink('https://t.me/StarPayUz_Admin');
         }
 
-        function buyStars(amount, price) {
-            tg.sendData(JSON.stringify({
-                action: 'buy_stars',
-                amount: amount,
-                price: price
-            }));
-            closeModal('starsModal');
+        function openLanguage() {
+            tg.openTelegramLink('https://t.me/StarPayUz_Channel');
         }
 
-        function buyPremium(duration, price) {
-            tg.sendData(JSON.stringify({
-                action: 'buy_premium',
-                duration: duration,
-                price: price
-            }));
-            closeModal('premiumModal');
+        function openDailyBonus() {
+            tg.showAlert('Savdo gunlari sahifasi tez orada...');
         }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Close modals on background click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.onclick = (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            };
-        });
     </script>
 </body>
 </html>
