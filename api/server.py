@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 
 from aiohttp import web
+from aiohttp.web_middlewares import middleware
 
 from bot.config import STARS_MAX_AMOUNT, STARS_MIN_AMOUNT, settings
 from services.database import (
@@ -20,6 +21,33 @@ logger = logging.getLogger(__name__)
 
 WEBAPP_DIR = Path(__file__).resolve().parent.parent / "webapp"
 fragment = FragmentAPI()
+
+CORS_ORIGINS = {
+    "https://starpayuz-webapp.vercel.app",
+    "https://kamron5505.github.io",
+}
+
+
+@middleware
+async def cors_middleware(request: web.Request, handler):
+    origin = request.headers.get("Origin", "")
+    # Allow preflight
+    if request.method == "OPTIONS":
+        resp = web.Response()
+        _set_cors(resp, origin)
+        return resp
+    resp = await handler(request)
+    _set_cors(resp, origin)
+    return resp
+
+
+def _set_cors(resp: web.Response, origin: str) -> None:
+    allowed = origin if origin in CORS_ORIGINS else "*"
+    resp.headers["Access-Control-Allow-Origin"] = allowed
+    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    resp.headers["Access-Control-Allow-Headers"] = (
+        "Content-Type, X-Telegram-Init-Data"
+    )
 
 
 async def _json_body(request: web.Request) -> dict:
@@ -246,7 +274,7 @@ async def on_startup(app: web.Application) -> None:
 
 
 def create_app() -> web.Application:
-  app = web.Application()
+  app = web.Application(middlewares=[cors_middleware])
   app.router.add_get("/health", health)
   app.router.add_post("/api/stars/price", api_stars_price)
   app.router.add_post("/api/order/stars", api_order_stars)
