@@ -6,40 +6,64 @@ const STARS_MAX = 1000000;
 const tg = window.Telegram.WebApp;
 tg.expand();
 tg.ready();
-tg.setHeaderColor('#0F1419');
-tg.setBackgroundColor('#0F1419');
+tg.setHeaderColor('#030712');
+tg.setBackgroundColor('#030712');
 
-// User balance
 let userBalance = 0;
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    fillUsernameFromTelegram();
     loadUserBalance();
 });
 
-// Load user balance
-function loadUserBalance() {
-    const balanceElement = document.getElementById('balance');
-    if (balanceElement) {
-        // TODO: Load from server
-        userBalance = 0;
-        balanceElement.textContent = userBalance.toLocaleString('uz-UZ') + ' so\'m';
+function fillUsernameFromTelegram() {
+    const input = document.getElementById('username');
+    const user = tg.initDataUnsafe?.user;
+    if (input && user?.username && !input.value.trim()) {
+        input.value = '@' + user.username;
     }
 }
 
-// Format number with spaces
+function loadUserBalance() {
+    const balanceElement = document.getElementById('balance');
+    if (balanceElement) {
+        userBalance = 0;
+        balanceElement.textContent = userBalance.toLocaleString('uz-UZ') + " so'm";
+    }
+}
+
 function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
-// Show loading
-function showLoading() {
-    tg.MainButton.showProgress();
+function getUsername(inputId) {
+    const val = (document.getElementById(inputId || 'username')?.value || '').trim();
+    if (!val || val === '@') return null;
+    return val.startsWith('@') ? val : '@' + val;
 }
 
-// Hide loading
-function hideLoading() {
-    tg.MainButton.hideProgress();
+function setBuyButtonLoading(btnId, loading) {
+    const btn = document.getElementById(btnId || 'buyBtn');
+    if (!btn) return;
+    if (loading) {
+        btn.dataset.originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Yuborilmoqda...';
+    } else {
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalText || 'Sotib olish';
+    }
+}
+
+function submitOrder(payload, btnId) {
+    setBuyButtonLoading(btnId, true);
+    try {
+        tg.sendData(JSON.stringify(payload));
+        setTimeout(() => tg.close(), 300);
+    } catch (e) {
+        setBuyButtonLoading(btnId, false);
+        tg.showAlert('Xatolik: ' + (e.message || 'qayta urinib ko\'ring'));
+    }
 }
 
 function validateStarsAmount(amount) {

@@ -470,20 +470,18 @@
             }
             selectedStars = check.value;
 
-            const username = document.getElementById('username').value;
-            if (!username || username === '@') {
+            const username = getUsername('username');
+            if (!username) {
                 tg.showAlert('Iltimos, username kiriting!');
                 return;
             }
 
-            tg.sendData(JSON.stringify({
+            submitOrder({
                 action: 'buy_stars',
                 amount: selectedStars,
                 price: selectedPrice,
                 username: username
-            }));
-
-            tg.close();
+            });
         }
 
         function openPremium() {

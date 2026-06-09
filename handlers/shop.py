@@ -89,10 +89,10 @@ async def process_buy_stars(callback: CallbackQuery):
         await db.create_order(order_id, user_id, "stars", amount, price)
         await db.update_order(order_id, status="processing")
         
-        # Process with API
-        result = await api_client.buy_stars(user_id, amount)
+        username = callback.from_user.username or str(user_id)
+        result = await api_client.buy_stars(username, amount)
         
-        if result and result.get("success"):
+        if result and result.get("ok"):
             await db.update_order(
                 order_id, 
                 status="completed",
@@ -168,10 +168,10 @@ async def process_buy_premium(callback: CallbackQuery):
         await db.create_order(order_id, user_id, "premium", duration, price)
         await db.update_order(order_id, status="processing")
         
-        # Process with API
-        result = await api_client.buy_premium(user_id, duration)
+        username = callback.from_user.username or str(user_id)
+        result = await api_client.buy_premium(username, duration)
         
-        if result and result.get("success"):
+        if result and result.get("ok"):
             await db.update_order(
                 order_id,
                 status="completed",

@@ -1,100 +1,61 @@
 import aiohttp
 import hashlib
-import time
 from typing import Optional, Dict, Any
 import config
 
 
 class FragmentAPIClient:
-    """Client for fragment-api.uz API"""
-    
+    """Client for fragment-api.uz API v1"""
+
     def __init__(self):
         self.api_key = config.FRAGMENT_API_KEY
-        self.api_url = config.FRAGMENT_API_URL
+        base = config.FRAGMENT_API_URL.rstrip("/")
+        self.api_url = base if base.endswith("/v1") else f"{base}/v1"
         self.shop_id = config.SHOP_ID
         self.shop_key = config.SHOP_KEY
-    
-    async def _make_request(self, endpoint: str, method: str = "GET", data: Optional[Dict] = None) -> Dict[str, Any]:
-        """Make API request"""
-        url = f"{self.api_url}/{endpoint}"
+
+    async def _make_request(
+        self, endpoint: str, data: Optional[Dict] = None
+    ) -> Dict[str, Any]:
+        url = f"{self.api_url}/{endpoint.lstrip('/')}"
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
+            "X-API-Key": self.api_key,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
         }
-        
         async with aiohttp.ClientSession() as session:
-            if method == "GET":
-                async with session.get(url, headers=headers, params=data) as response:
-                    return await response.json()
-            elif method == "POST":
-                async with session.post(url, headers=headers, json=data) as response:
-                    return await response.json()
-    
-    async def create_payment(self, amount: float, order_id: str, user_id: int, description: str) -> Optional[Dict]:
-        """Create payment link"""
-        data = {
-            "shop_id": self.shop_id,
-            "amount": amount,
-            "order_id": order_id,
-            "description": description,
-            "return_url": f"{config.WEBAPP_URL}/payment/success",
-            "callback_url": f"{config.WEBAPP_URL}/payment/callback"
-        }
-        
-        try:
-            response = await self._make_request("payment/create", "POST", data)
-            return response
-        except Exception as e:
-            print(f"Error creating payment: {e}")
-            return None
-    
-    async def check_payment(self, order_id: str) -> Optional[Dict]:
-        """Check payment status"""
-        try:
-            response = await self._make_request(f"payment/check", "GET", {"order_id": order_id})
-            return response
-        except Exception as e:
-            print(f"Error checking payment: {e}")
-            return None
-    
-    async def buy_stars(self, user_id: int, amount: int) -> Optional[Dict]:
-        """Purchase Telegram stars"""
-        data = {
-            "user_id": user_id,
-            "amount": amount
-        }
-        
-        try:
-            response = await self._make_request("stars/buy", "POST", data)
-            return response
-        except Exception as e:
-            print(f"Error buying stars: {e}")
-            return None
-    
-    async def buy_premium(self, user_id: int, duration_months: int) -> Optional[Dict]:
-        """Purchase Telegram Premium"""
-        data = {
-            "user_id": user_id,
-            "duration": duration_months
-        }
-        
-        try:
-            response = await self._make_request("premium/buy", "POST", data)
-            return response
-        except Exception as e:
-            print(f"Error buying premium: {e}")
-            return None
-    
+            async with session.post(url, headers=headers, json=data or {}) as response:
+                try:
+                    return await response.json(content_type=None)
+                except Exception:
+                    text = await response.text()
+                    return {"ok": False, "message": text, "status": response.status}
+
+    async def get_stars_price(self, amount: int) -> Dict[str, Any]:
+        return await self._make_request("stars/pricing", {"amount": amount})
+
+    async def buy_stars(self, username: str, amount: int) -> Dict[str, Any]:
+        return await self._make_request(
+            "stars/buy",
+            {"username": username.lstrip("@"), "amount": amount},
+        )
+
+    async def buy_premium(self, username: str, duration: int) -> Dict[str, Any]:
+        return await self._make_request(
+            "premium/buy",
+            {"username": username.lstrip("@"), "duration": duration},
+        )
+
+    async def get_user_info(self, username: str) -> Dict[str, Any]:
+        return await self._make_request(
+            "getInfo", {"username": username.lstrip("@")}
+        )
+
     def verify_callback(self, data: Dict) -> bool:
-        """Verify payment callback signature"""
         received_signature = data.get("signature", "")
-        
-        # Create signature string
         sign_string = f"{data.get('order_id')}:{data.get('amount')}:{self.shop_key}"
         expected_signature = hashlib.sha256(sign_string.encode()).hexdigest()
-        
         return received_signature == expected_signature
 
 
-# Global API client instance
 api_client = FragmentAPIClient()

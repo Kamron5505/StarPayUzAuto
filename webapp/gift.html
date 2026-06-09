@@ -116,6 +116,83 @@
         transform: scale(0.97);
     }
 
+    .gift-card.selected {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        box-shadow: 0 0 30px rgba(59, 130, 246, .5);
+    }
+
+    .section-label {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .inside-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+    }
+
+    .input {
+        width: 100%;
+        height: 56px;
+        background: #111827;
+        border: 2px solid #3B82F6;
+        border-radius: 18px;
+        padding-left: 50px;
+        padding-right: 15px;
+        color: #fff;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .input::placeholder { color: #9CA3AF; }
+
+    .selected-gift-info {
+        background: #111827;
+        border: 2px solid #3B82F6;
+        border-radius: 18px;
+        padding: 14px 18px;
+        margin-bottom: 16px;
+        text-align: center;
+        color: #9CA3AF;
+        font-size: 14px;
+    }
+
+    .selected-gift-info strong {
+        color: #3B82F6;
+    }
+
+    .btn-primary {
+        width: 100%;
+        height: 58px;
+        margin-top: 8px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 18px;
+        background: #3B82F6;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .3s;
+        box-shadow: 0 0 25px rgba(59, 130, 246, .3);
+    }
+
+    .btn-primary:disabled {
+        opacity: .5;
+        cursor: not-allowed;
+    }
+
     .gift-emoji {
         font-size: 48px;
         margin-bottom: 12px;
@@ -195,62 +272,73 @@
 
         <p class="page-subtitle">O'zingizga yoki do'stingizga gift yuboring</p>
 
+        <h3 class="section-label">Qabul qiluvchi</h3>
+        <div class="input-wrapper">
+            <img src="./images/user.webp" class="inside-icon" alt="">
+            <input type="text" id="username" placeholder="Username kiriting" class="input">
+        </div>
+
+        <h3 class="section-label">Gift tanlang</h3>
+        <div id="selectedGiftInfo" class="selected-gift-info">Gift tanlanmagan</div>
+
         <!-- Gift Grid -->
         <div class="gift-grid">
-            <div class="gift-card" onclick="selectGift('TeddyBear', 3000)">
+            <div class="gift-card" onclick="pickGift(this, 'TeddyBear', 3000)">
                 <div class="gift-emoji">🧸</div>
                 <div class="gift-name">TeddyBear</div>
                 <div class="gift-price">3 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('HeartGift', 3000)">
+            <div class="gift-card" onclick="pickGift(this, 'HeartGift', 3000)">
                 <div class="gift-emoji">💝</div>
                 <div class="gift-name">HeartGift</div>
                 <div class="gift-price">3 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('GiftBox', 5000)">
+            <div class="gift-card" onclick="pickGift(this, 'GiftBox', 5000)">
                 <div class="gift-emoji">🎁</div>
                 <div class="gift-name">GiftBox</div>
                 <div class="gift-price">5 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Rose', 5000)">
+            <div class="gift-card" onclick="pickGift(this, 'Rose', 5000)">
                 <div class="gift-emoji">🌹</div>
                 <div class="gift-name">Rose</div>
                 <div class="gift-price">5 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Cake', 10000)">
+            <div class="gift-card" onclick="pickGift(this, 'Cake', 10000)">
                 <div class="gift-emoji">🎂</div>
                 <div class="gift-name">Cake</div>
                 <div class="gift-price">10 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Bouquet', 10000)">
+            <div class="gift-card" onclick="pickGift(this, 'Bouquet', 10000)">
                 <div class="gift-emoji">💐</div>
                 <div class="gift-name">Bouquet</div>
                 <div class="gift-price">10 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Diamond', 15000)">
+            <div class="gift-card" onclick="pickGift(this, 'Diamond', 15000)">
                 <div class="gift-emoji">💎</div>
                 <div class="gift-name">Diamond</div>
                 <div class="gift-price">15 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Trophy', 15000)">
+            <div class="gift-card" onclick="pickGift(this, 'Trophy', 15000)">
                 <div class="gift-emoji">🏆</div>
                 <div class="gift-name">Trophy</div>
                 <div class="gift-price">15 000 so'm</div>
             </div>
 
-            <div class="gift-card" onclick="selectGift('Crown', 20000)">
+            <div class="gift-card" onclick="pickGift(this, 'Crown', 20000)">
                 <div class="gift-emoji">👑</div>
                 <div class="gift-name">Crown</div>
                 <div class="gift-price">20 000 so'm</div>
             </div>
         </div>
+
+        <button class="btn-primary" id="buyBtn" onclick="buyGift()" disabled>Sotib olish</button>
     </div>
 
     <!-- Bottom Navigation -->
@@ -275,20 +363,35 @@
 
     <script src="js/common.js"></script>
     <script>
-        function selectGift(name, price) {
-            tg.showConfirm(
-                `${name} sovg'asini ${price.toLocaleString('uz-UZ')} so'mga sotib olasizmi?`,
-                (confirmed) => {
-                    if (confirmed) {
-                        tg.sendData(JSON.stringify({
-                            action: 'buy_gift',
-                            gift: name,
-                            price: price
-                        }));
-                        tg.close();
-                    }
-                }
-            );
+        let selectedGift = null;
+        let selectedGiftPrice = 0;
+
+        function pickGift(el, name, price) {
+            selectedGift = name;
+            selectedGiftPrice = price;
+            document.querySelectorAll('.gift-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('selectedGiftInfo').innerHTML =
+                `Tanlandi: <strong>${name}</strong> — ${price.toLocaleString('uz-UZ')} so'm`;
+            document.getElementById('buyBtn').disabled = false;
+        }
+
+        function buyGift() {
+            const username = getUsername('username');
+            if (!username) {
+                tg.showAlert('Iltimos, username kiriting!');
+                return;
+            }
+            if (!selectedGift) {
+                tg.showAlert('Gift tanlang!');
+                return;
+            }
+            submitOrder({
+                action: 'buy_gift',
+                gift: selectedGift,
+                price: selectedGiftPrice,
+                username: username
+            });
         }
 
         function openStars() {

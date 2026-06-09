@@ -7,7 +7,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import config
 import database
-from handlers import start, shop, balance, profile
+from handlers import start, shop, balance, profile, webapp
 
 # Configure logging
 logging.basicConfig(
@@ -30,6 +30,7 @@ async def main():
     
     # Register routers
     dp.include_router(start.router)
+    dp.include_router(webapp.router)
     dp.include_router(shop.router)
     dp.include_router(balance.router)
     dp.include_router(profile.router)
