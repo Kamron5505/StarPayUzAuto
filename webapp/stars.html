@@ -352,7 +352,7 @@
     <!-- Tabs -->
     <div class="tabs-container">
         <div class="tabs">
-            <button class="tab">Stars olish</button>
+            <button class="tab active" onclick="openStars()">Stars olish</button>
             <button class="tab" onclick="openPremium()">Premium olish</button>
         </div>
     </div>
@@ -378,23 +378,20 @@
             <input type="number" id="customStars" class="input" placeholder="50 — 1 000 000" min="50" max="1000000" step="1">
         </div>
         <p class="amount-hint">Minimal: 50 · Maksimal: 1 000 000 stars</p>
-    
-    </div>
 
-    <div class="buttons-row">
-        <button class="amount-btn" onclick="selectAmount(50, 10000)">50</button>
-        <button class="amount-btn" onclick="selectAmount(75, 15000)">75</button>
-        <button class="amount-btn" onclick="selectAmount(100, 20000)">100</button>
-        <button class="amount-btn" onclick="selectAmount(250, 50000)">250</button>
-        <button class="amount-btn" onclick="selectAmount(500, 100000)">500</button>
-    </div>
-    <!-- Buy Button -->
-    <button class="btn-primary" id="buyBtn" onclick="buyStars()" disabled>Sotib olish</button>
+        <div class="buttons-row">
+            <button class="amount-btn" onclick="selectAmount(50, 10000)">50</button>
+            <button class="amount-btn" onclick="selectAmount(75, 15000)">75</button>
+            <button class="amount-btn" onclick="selectAmount(100, 20000)">100</button>
+            <button class="amount-btn" onclick="selectAmount(250, 50000)">250</button>
+            <button class="amount-btn" onclick="selectAmount(500, 100000)">500</button>
+        </div>
+        <button class="btn-primary" id="buyBtn" onclick="buyStars()" disabled>Sotib olish</button>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active">
+        <div class="nav-item active" onclick="openStars()">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Menu</div>
         </div>
@@ -482,6 +479,10 @@
                 price: selectedPrice,
                 username: username
             });
+        }
+
+        function openStars() {
+            window.location.href = 'stars.html';
         }
 
         function openPremium() {
