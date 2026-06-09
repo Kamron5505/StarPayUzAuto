@@ -30,7 +30,7 @@ class FragmentAPI:
 
     def _headers(self) -> dict[str, str]:
         return {
-            "Authorization": f"Bearer {self.api_key}",
+            "X-API-Key": self.api_key,
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
@@ -42,7 +42,8 @@ class FragmentAPI:
         json: dict | None = None,
     ) -> dict[str, Any]:
         url = f"{self.base_url}/{path.lstrip('/')}"
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=30)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.request(
                 method, url, headers=self._headers(), json=json
             ) as resp:
