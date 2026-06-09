@@ -4,10 +4,12 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import CallbackQuery
 from aiogram.utils.formatting import Text, Bold, as_list, as_marked_section
 from aiogram.enums import ParseMode
+import logging
 import keyboards
 from database import db
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
 router = Router()
 
 # Premium emoji IDs
@@ -42,13 +44,10 @@ async def cmd_start(message: Message):
     if not user:
         user = await db.create_user(user_id, username, first_name, referrer_id)
         
-        # DEBUG: Log to verify new code is running
-        logger.info(f"NEW CODE v2: Creating welcome for {first_name}")
-        
         welcome_text = (
             f'👋 <b>Assalomu alaykum, {first_name}!</b>\n\n'
             f'💰 <b>Balans:</b> {user["balance"]:,.0f} so\'m\n'
-            f'👥 <b>Referallar:</b> {user["referrals"]} ta\n\n'
+            f'� <b>Referallar:</b> {user["referrals"]} ta\n\n'
             f'⚡️ <i>Quyidagilardan kerakli bo\'limni tanlang:</i>'
         )
         entities = [
