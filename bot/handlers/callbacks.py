@@ -76,9 +76,13 @@ async def cb_refresh(query: CallbackQuery) -> None:
   user = await get_user(query.from_user.id) or await ensure_user(
     query.from_user.id, query.from_user.username, query.from_user.full_name
   )
-  name = query.from_user.full_name or query.from_user.username or "User"
   await query.message.edit_text(
-    menu_text(user, name),
+    menu_text(
+      user,
+      query.from_user.id,
+      query.from_user.username,
+      query.from_user.first_name,
+    ),
     reply_markup=main_inline_keyboard(),
   )
   await query.answer("Yangilandi")

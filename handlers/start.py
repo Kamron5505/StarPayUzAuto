@@ -14,6 +14,8 @@ router = Router()
 
 # Premium emoji IDs
 EMOJI_WAVE = "5312345830382910731"  # 👋
+EMOJI_ORANGE = "5336936725765700868"  # 🟠
+EMOJI_WALLET = "5215420556089776398"  # 👛
 EMOJI_MONEY = "5407091881219736716"  # 💰
 EMOJI_PEOPLE = "5879905000972358125"  # 👥
 EMOJI_LIGHTNING = "5224496844188458905"  # ⚡️
@@ -21,6 +23,17 @@ EMOJI_STAR = "5807791714093502248"  # ⭐️
 EMOJI_GIFT = "5348068314629315530"  # 🎁
 EMOJI_CHECKMARK = "5774022692642492953"  # ✅
 EMOJI_CROSS = "5774077015388852135"  # ❌
+
+
+def get_welcome_text(user: dict, user_id: int, username: str | None, first_name: str | None) -> str:
+    display = f"@{username}" if username else (first_name or "Foydalanuvchi")
+    return (
+        f'<tg-emoji emoji-id="{EMOJI_WAVE}">👋</tg-emoji> <b>Assalomu alaykum, {display}</b>\n\n'
+        f'<tg-emoji emoji-id="{EMOJI_ORANGE}">🟠</tg-emoji> <b>User ID:</b> {user_id}\n'
+        f'┗ <tg-emoji emoji-id="{EMOJI_WALLET}">👛</tg-emoji> <b>Balans:</b> {user["balance"]:,.0f} so\'m\n'
+        f'┗ <tg-emoji emoji-id="{EMOJI_PEOPLE}">👥</tg-emoji> <b>Referallar:</b> {user["referrals"]} ta\n\n'
+        f'<blockquote><tg-emoji emoji-id="{EMOJI_LIGHTNING}">⚡️</tg-emoji> <b>Kerakli bo\'limni tanlang:</b></blockquote>'
+    )
 
 
 @router.message(CommandStart())
@@ -46,13 +59,8 @@ async def cmd_start(message: Message):
     else:
         await db.update_user_activity(user_id)
     
-    welcome_text = (
-        f'<tg-emoji emoji-id="{EMOJI_WAVE}">👋</tg-emoji> <b>Assalomu alaykum, {first_name}!</b>\n\n'
-        f'<tg-emoji emoji-id="{EMOJI_MONEY}">💰</tg-emoji> <b>Balans:</b> {user["balance"]:,.0f} so\'m\n'
-        f'<tg-emoji emoji-id="{EMOJI_PEOPLE}">👥</tg-emoji> <b>Referallar:</b> {user["referrals"]} ta\n\n'
-        f'<tg-emoji emoji-id="{EMOJI_LIGHTNING}">⚡️</tg-emoji> <i>Quyidagilardan kerakli bo\'limni tanlang:</i>'
-    )
-    
+    welcome_text = get_welcome_text(user, user_id, username, first_name)
+
     await message.answer(
         welcome_text,
         reply_markup=keyboards.get_webapp_main_keyboard(),
@@ -67,11 +75,11 @@ async def back_to_main(message: Message):
     user = await db.get_user(user_id)
     
     if user:
-        text = (
-            f'<tg-emoji emoji-id="{EMOJI_WAVE}">👋</tg-emoji> <b>Assalomu alaykum, {message.from_user.first_name}!</b>\n\n'
-            f'<tg-emoji emoji-id="{EMOJI_MONEY}">💰</tg-emoji> <b>Balans:</b> {user["balance"]:,.0f} so\'m\n'
-            f'<tg-emoji emoji-id="{EMOJI_PEOPLE}">👥</tg-emoji> <b>Referallar:</b> {user["referrals"]} ta\n\n'
-            f'<tg-emoji emoji-id="{EMOJI_LIGHTNING}">⚡️</tg-emoji> <i>Quyidagilardan kerakli bo\'limni tanlang:</i>'
+        text = get_welcome_text(
+            user,
+            user_id,
+            message.from_user.username,
+            message.from_user.first_name,
         )
     else:
         text = "🏠 Bosh menyu:"

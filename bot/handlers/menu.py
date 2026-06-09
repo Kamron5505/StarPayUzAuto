@@ -59,8 +59,12 @@ async def reply_language(message: Message) -> None:
 
   user = await get_user(message.from_user.id)
   if user:
-    name = message.from_user.full_name or message.from_user.username or "User"
     await message.answer(
-      menu_text(user, name),
+      menu_text(
+        user,
+        message.from_user.id,
+        message.from_user.username,
+        message.from_user.first_name,
+      ),
       reply_markup=main_inline_keyboard(),
     )
