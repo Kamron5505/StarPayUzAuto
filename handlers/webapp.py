@@ -41,11 +41,18 @@ async def handle_webapp_data(message: Message):
         "buy_gift": _buy_gift,
         "buy_phone": _buy_phone,
     }
-    handler = handlers.get(action)
+    handler = handlers.get(action)  
     if not handler:
         await message.answer("❌ Noma'lum buyurtma turi.")
         return
-    await handler(message, data)
+    try:
+        await handler(message, data)
+    except Exception as e:
+        logger.exception("Webapp handler xatoligi: %s", e)
+        await message.answer(
+            "❌ Ichki xatolik yuz berdi. Iltimos qayta urinib ko'ring yoki admin bilan bog'laning.",
+            reply_markup=keyboards.get_webapp_main_keyboard(),
+        )
 
 
 async def _buy_stars(message: Message, data: dict):
@@ -82,7 +89,7 @@ async def _buy_stars(message: Message, data: dict):
     await db.update_order(order_id, status="processing")
 
     result = await api_client.buy_stars(username, amount)
-    if result.get("ok"):
+    if result and result.get("ok"):
         await db.update_order(
             order_id, status="completed", completed_at=datetime.utcnow().isoformat()
         )
@@ -142,7 +149,7 @@ async def _buy_premium(message: Message, data: dict):
     await db.update_order(order_id, status="processing")
 
     result = await api_client.buy_premium(username, duration)
-    if result.get("ok"):
+    if result and result.get("ok"):
         await db.update_order(
             order_id, status="completed", completed_at=datetime.utcnow().isoformat()
         )

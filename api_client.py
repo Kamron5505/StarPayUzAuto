@@ -1,3 +1,4 @@
+import asyncio
 import aiohttp
 import hashlib
 from typing import Optional, Dict, Any
@@ -23,13 +24,21 @@ class FragmentAPIClient:
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, headers=headers, json=data or {}) as response:
-                try:
-                    return await response.json(content_type=None)
-                except Exception:
-                    text = await response.text()
-                    return {"ok": False, "message": text, "status": response.status}
+        timeout = aiohttp.ClientTimeout(total=30)
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.post(url, headers=headers, json=data or {}) as response:
+                    try:
+                        return await response.json(content_type=None)
+                    except Exception:
+                        text = await response.text()
+                        return {"ok": False, "message": text, "status": response.status}
+        except aiohttp.ClientConnectorError:
+            return {"ok": False, "message": "API serverga ulanib bo'lmadi"}
+        except asyncio.TimeoutError:
+            return {"ok": False, "message": "API server javob bermadi (timeout)"}
+        except Exception as e:
+            return {"ok": False, "message": f"So'rov xatoligi: {e}"}
 
     async def get_stars_price(self, amount: int) -> Dict[str, Any]:
         return await self._make_request("stars/pricing", {"amount": amount})
