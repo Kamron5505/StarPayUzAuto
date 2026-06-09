@@ -10,61 +10,17 @@ import config
 
 
 def get_webapp_main_keyboard() -> InlineKeyboardMarkup:
-    """Main Web App keyboard - shown on start"""
+    """Main Web App keyboard — single green Web App button"""
     builder = InlineKeyboardBuilder()
-    
-    # Row 1: Stars and Premium with Web App
+
     builder.row(
         InlineKeyboardButton(
-            text="⭐ Stars olish",
-            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/stars.html")
-        ),
-        InlineKeyboardButton(
-            text="💎 Premium olish",
-            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/premium.html")
+            text="🚀 StarPayUz ochish",
+            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/index.html"),
+            style="success",
         )
     )
-    
-    # Row 2: Phone and Gift with Web App
-    builder.row(
-        InlineKeyboardButton(
-            text="📱 Nomer olish",
-            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/phone.html")
-        ),
-        InlineKeyboardButton(
-            text="🎁 Gift olish",
-            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/gift.html")
-        )
-    )
-    
-    # Row 3: Orders (full width)
-    builder.row(
-        InlineKeyboardButton(
-            text="📦 Buyurtmalarim",
-            callback_data="my_orders"
-        )
-    )
-    
-    # Row 4: Referrals and Balance
-    builder.row(
-        InlineKeyboardButton(
-            text="👥 Referallar",
-            callback_data="referrals"
-        ),
-        InlineKeyboardButton(
-            text="✨ Hisobni to'ldirish",
-            web_app=WebAppInfo(url=f"{config.WEBAPP_URL}/topup.html")
-        )
-    )
-    
-    # Row 5: Support
-    builder.row(
-        InlineKeyboardButton(
-            text="🔒 Qo'llab-quvvatlash",
-            callback_data="support"
-        )
-    )
-    
+
     return builder.as_markup()
 
 

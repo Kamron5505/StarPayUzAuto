@@ -38,39 +38,10 @@ def main_inline_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [
                 _btn(
-                    "🌟 Stars olish",
-                    web_app_url=f"{base}/app/stars.html",
-                    style="primary",
-                    icon_custom_emoji_id=settings.custom_emoji_star,
-                ),
-                _btn(
-                    "💎 Premium olish",
-                    web_app_url=f"{base}/app/premium.html",
+                    "🚀 StarPayUz ochish",
+                    web_app_url=f"{base}/app/index.html",
                     style="success",
-                    icon_custom_emoji_id=settings.custom_emoji_premium,
                 ),
-            ],
-            [
-                _btn(
-                    "📞 Nomer olish",
-                    web_app_url=f"{base}/app/phone.html",
-                    icon_custom_emoji_id=settings.custom_emoji_phone,
-                ),
-                _btn(
-                    "🎁 Gift olish",
-                    web_app_url=f"{base}/app/gift.html",
-                    icon_custom_emoji_id=settings.custom_emoji_gift,
-                ),
-            ],
-            [
-                _btn("📦 Buyurtmalarim", callback_data="orders"),
-            ],
-            [
-                _btn("👥 Referallar", callback_data="referrals"),
-                _btn("💸 Hisobni to'ldirish", callback_data="topup", style="success"),
-            ],
-            [
-                _btn("👨‍💻 Qo'llab-quvvatlash", url=settings.support_url),
             ],
         ]
     )
