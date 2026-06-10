@@ -6,6 +6,12 @@ load_dotenv()
 # Bot settings
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+# Telethon (User Client for sending gifts)
+API_ID = int(os.getenv("API_ID", "0"))
+API_HASH = os.getenv("API_HASH", "")
+PHONE_NUMBER = os.getenv("PHONE_NUMBER", "")  # Your phone number for user account
+SESSION_NAME = os.getenv("SESSION_NAME", "starpay_session")
+
 # Fragment API settings
 FRAGMENT_API_KEY = os.getenv("FRAGMENT_API_KEY")
 FRAGMENT_API_URL = os.getenv("FRAGMENT_API_URL", "https://fragment-api.uz/api")

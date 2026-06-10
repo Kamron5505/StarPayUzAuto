@@ -44,6 +44,20 @@ async def main():
     # Start API server first (Railway needs port open to mark deploy as success)
     runner = await start_api_server()
 
+    # Initialize Telethon gift sender (if credentials provided)
+    if config.API_ID and config.API_HASH:
+        try:
+            from services.telethon_client import init_gift_sender
+            await init_gift_sender(
+                config.API_ID,
+                config.API_HASH,
+                config.PHONE_NUMBER if config.PHONE_NUMBER else None
+            )
+            logger.info("Telethon gift sender initialized")
+        except Exception as e:
+            logger.error(f"Failed to initialize Telethon: {e}")
+            logger.warning("Gift sending will not be available")
+
     # Initialize bot
     bot = Bot(
         token=config.BOT_TOKEN,
@@ -65,6 +79,9 @@ async def main():
     try:
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
+        # Cleanup
+        from services.telethon_client import stop_gift_sender
+        await stop_gift_sender()
         await bot.session.close()
         await runner.cleanup()
 

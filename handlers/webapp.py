@@ -201,17 +201,66 @@ async def _buy_gift(message: Message, data: dict):
     order_id = str(uuid.uuid4())[:8]
     await db.update_balance(user_id, price, "subtract")
     await db.create_order(order_id, user_id, "gift", 1, price)
-    await db.update_order(order_id, status="completed", completed_at=datetime.utcnow().isoformat())
+    await db.update_order(order_id, status="processing")
 
-    user = await db.get_user(user_id)
-    await message.answer(
-        f"✅ <b>Gift buyurtma qabul qilindi!</b>\n\n"
-        f"🎁 <b>{gift}</b> → @{username}\n"
-        f"💰 Yangi balans: {user['balance']:,.0f} so'm\n\n"
-        f"<i>Gift tez orada yetkaziladi.</i>",
-        parse_mode="HTML",
-        reply_markup=keyboards.get_webapp_main_keyboard(),
-    )
+    # Отправка подарка через Telethon
+    from services.telethon_client import gift_sender
+
+    if not gift_sender:
+        await db.update_order(order_id, status="failed")
+        await db.update_balance(user_id, price, "add")
+        await message.answer(
+            "❌ <b>Gift сервис недоступен</b>\n\nПул qaytarildi.",
+            parse_mode="HTML",
+            reply_markup=keyboards.get_webapp_main_keyboard(),
+        )
+        return
+
+    # Маппинг подарков на их ID (нужно будет заполнить реальными ID)
+    gift_mapping = {
+        "bear": "premium_gift_bear",
+        "rose": "premium_gift_rose",
+        "cake": "premium_gift_cake",
+        "diamond": "premium_gift_diamond",
+        "heart": "premium_gift_heart",
+        "ring": "premium_gift_ring",
+        "rocket": "premium_gift_rocket",
+        "trophy": "premium_gift_trophy",
+    }
+
+    gift_id = gift_mapping.get(gift.lower())
+    if not gift_id:
+        await db.update_order(order_id, status="failed")
+        await db.update_balance(user_id, price, "add")
+        await message.answer(
+            "❌ <b>Noma'lum gift turi</b>\n\nPul qaytarildi.",
+            parse_mode="HTML",
+        )
+        return
+
+    result = await gift_sender.send_gift(username, gift_id, message="🎁 Gift from StarPayUz")
+
+    if result and result.get("ok"):
+        await db.update_order(
+            order_id, status="completed", completed_at=datetime.utcnow().isoformat()
+        )
+        user = await db.get_user(user_id)
+        await message.answer(
+            f"✅ <b>Muvaffaqiyatli!</b>\n\n"
+            f"🎁 <b>{gift.capitalize()}</b> → @{username}\n"
+            f"💰 Yangi balans: {user['balance']:,.0f} so'm",
+            parse_mode="HTML",
+            reply_markup=keyboards.get_webapp_main_keyboard(),
+        )
+    else:
+        await db.update_order(order_id, status="failed")
+        await db.update_balance(user_id, price, "add")
+        err = result.get("error", "Noma'lum xatolik")
+        await message.answer(
+            f"❌ <b>Xatolik:</b> {err}\n\nPul qaytarildi.",
+            parse_mode="HTML",
+            reply_markup=keyboards.get_webapp_main_keyboard(),
+        )
 
 
 async def _buy_phone(message: Message, data: dict):
