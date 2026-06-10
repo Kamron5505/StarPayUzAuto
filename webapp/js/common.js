@@ -11,6 +11,14 @@ tg.setBackgroundColor('#030712');
 
 let userBalance = 0;
 
+// API base — can be overridden per-page via window.API_BASE
+// e.g. in stars.html: <script>window.API_BASE = 'https://your-railway-url.railway.app';</script>
+function getApiBase() {
+    return (typeof window.API_BASE !== 'undefined' && window.API_BASE)
+        ? window.API_BASE.replace(/\/$/, '')
+        : '';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     fillUsernameFromTelegram();
     loadUserBalance();
@@ -55,14 +63,70 @@ function setBuyButtonLoading(btnId, loading) {
     }
 }
 
-function submitOrder(payload, btnId) {
+/**
+ * Submit order via HTTP POST to the API server.
+ * Works with both inline and reply keyboard WebApp buttons.
+ *
+ * payload fields:
+ *   action: 'buy_stars' | 'buy_premium' | 'buy_gift' | 'buy_phone'
+ *   + action-specific fields (amount, username, duration, etc.)
+ */
+async function submitOrder(payload, btnId) {
     setBuyButtonLoading(btnId, true);
+
+    // Map action → API endpoint
+    const endpoints = {
+        buy_stars:   '/api/order/stars',
+        buy_premium: '/api/order/premium',
+        buy_gift:    '/api/order/gift',
+        buy_phone:   '/api/order/phone',
+    };
+
+    const endpoint = endpoints[payload.action];
+    if (!endpoint) {
+        setBuyButtonLoading(btnId, false);
+        tg.showAlert('Noma\'lum buyurtma turi.');
+        return;
+    }
+
+    // Build request body — rename fields to what the API expects
+    const body = { ...payload };
+    if (payload.action === 'buy_stars') {
+        body.quantity = payload.amount;
+    }
+    if (payload.action === 'buy_premium') {
+        body.months = payload.duration;
+    }
+
+    // Pass Telegram initData for auth
+    body.initData = tg.initData || '';
+    body.telegram_id = tg.initDataUnsafe?.user?.id || null;
+
     try {
-        tg.sendData(JSON.stringify(payload));
-        setTimeout(() => tg.close(), 300);
+        const response = await fetch(getApiBase() + endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Telegram-Init-Data': tg.initData || '',
+            },
+            body: JSON.stringify(body),
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+            tg.showPopup({
+                title: '✅ Muvaffaqiyatli',
+                message: 'Buyurtma qabul qilindi!',
+                buttons: [{ type: 'ok' }]
+            }, () => tg.close());
+        } else {
+            setBuyButtonLoading(btnId, false);
+            tg.showAlert('❌ Xatolik: ' + (result.error || 'Qayta urinib ko\'ring'));
+        }
     } catch (e) {
         setBuyButtonLoading(btnId, false);
-        tg.showAlert('Xatolik: ' + (e.message || 'qayta urinib ko\'ring'));
+        tg.showAlert('❌ Tarmoq xatoligi. Internet aloqangizni tekshiring.');
     }
 }
 

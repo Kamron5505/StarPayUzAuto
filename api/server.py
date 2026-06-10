@@ -79,6 +79,20 @@ async def health(_: web.Request) -> web.Response:
   return web.json_response({"ok": True, "service": "StarPayUz"})
 
 
+async def api_user_balance(request: web.Request) -> web.Response:
+  auth = await _auth_user(request)
+  user_id = _user_id_from_auth(auth)
+  body = await _json_body(request)
+  if not user_id:
+    user_id = body.get("telegram_id")
+  if not user_id:
+    return web.json_response({"ok": False, "error": "Unauthorized"}, status=401)
+  user = await get_user(int(user_id))
+  if not user:
+    return web.json_response({"ok": True, "balance": 0})
+  return web.json_response({"ok": True, "balance": user.get("balance", 0)})
+
+
 def _parse_stars_quantity(body: dict) -> int | None:
   raw = body.get("quantity") or body.get("amount")
   if raw is None:
@@ -277,6 +291,7 @@ async def on_startup(app: web.Application) -> None:
 def create_app() -> web.Application:
   app = web.Application(middlewares=[cors_middleware])
   app.router.add_get("/health", health)
+  app.router.add_post("/api/user/balance", api_user_balance)
   app.router.add_post("/api/stars/price", api_stars_price)
   app.router.add_post("/api/order/stars", api_order_stars)
   app.router.add_post("/api/order/premium", api_order_premium)

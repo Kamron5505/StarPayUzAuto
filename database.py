@@ -6,8 +6,11 @@ import config
 
 
 class Database:
-    def __init__(self, db_path="database.db"):
-        self.db_path = db_path
+    def __init__(self, db_path=None):
+        # Use same DB as services/database.py
+        from pathlib import Path
+        default = str(Path(__file__).resolve().parent / "data" / "starpay.db")
+        self.db_path = db_path or default
     
     async def init_db(self):
         """Initialize database tables"""

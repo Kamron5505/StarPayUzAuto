@@ -1,6 +1,7 @@
 import aiosqlite
 from pathlib import Path
 
+# Single DB path used by the whole project
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "starpay.db"
 
 
