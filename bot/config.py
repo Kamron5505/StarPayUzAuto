@@ -32,9 +32,13 @@ class Settings:
     @classmethod
     def from_env(cls) -> "Settings":
         base = os.getenv("WEBAPP_BASE_URL", "http://localhost:8080").rstrip("/")
+        # Clean API key - remove all whitespace including newlines
+        raw_api_key = os.getenv("FRAGMENT_API_KEY") or os.getenv("FRAGMENT_API_KEY", "")
+        clean_api_key = "".join(raw_api_key.split()) if raw_api_key else ""
+        
         return cls(
             bot_token=os.getenv("BOT_TOKEN", ""),
-            fragment_api_key=os.getenv("FRAGMENT_API_KEY") or os.getenv("FRAGMENT_API_KEY", ""),
+            fragment_api_key=clean_api_key,
             fragment_api_base=os.getenv("FRAGMENT_API_BASE")
                 or os.getenv("FRAGMENT_API_URL", "https://fragment-api.uz/api/v1").rstrip("/"),
             shop_id=os.getenv("SHOP_ID", ""),

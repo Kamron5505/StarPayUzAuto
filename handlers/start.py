@@ -57,8 +57,6 @@ async def cmd_start(message: Message):
     
     if not user:
         user = await db.create_user(user_id, username, first_name, referrer_id)
-    else:
-        await db.update_user_activity(user_id)
     
     welcome_text = get_welcome_text(user, username, first_name)
 

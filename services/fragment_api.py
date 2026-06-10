@@ -25,7 +25,9 @@ class FragmentAPI:
         api_key: str | None = None,
         base_url: str | None = None,
     ):
-        self.api_key = (api_key or settings.fragment_api_key or "").strip()
+        # Strip all whitespace including newlines, carriage returns
+        raw_key = api_key or settings.fragment_api_key or ""
+        self.api_key = "".join(raw_key.split())  # Remove ALL whitespace
         self.base_url = (base_url or settings.fragment_api_base).rstrip("/")
 
     def _headers(self) -> dict[str, str]:
