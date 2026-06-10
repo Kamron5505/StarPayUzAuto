@@ -25,7 +25,7 @@
         background: #030712;
         color: #fff;
         padding: 20px;
-        padding-bottom: 100px;
+        padding-bottom: 200px;
     }
 
     .header {
@@ -208,6 +208,16 @@
 
     .nav-icon {
         font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;
+    }
+
+    .nav-icon img {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
     }
 
     .nav-label {
@@ -278,19 +288,27 @@
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item" onclick="openStars()">
-            <div class="nav-icon">🏠</div>
+            <div class="nav-icon">
+                <img src="./images/home.webp" alt="home">
+            </div>
             <div class="nav-label">Menu</div>
         </div>
         <div class="nav-item" onclick="openGifts()">
-            <div class="nav-icon">🎁</div>
+            <div class="nav-icon">
+                <img src="./images/gift.webp" alt="Gifts">
+            </div>
             <div class="nav-label">Gifts</div>
         </div>
         <div class="nav-item" onclick="openReyting()">
-            <div class="nav-icon">🏆</div>
-            <div class="nav-label">Reyting</div>
+            <div class="nav-icon">
+                <img src="./images/rating.webp" alt="Rating">
+            </div>
+            <div class="nav-label">Rating</div>
         </div>
         <div class="nav-item" onclick="openProfile()">
-            <div class="nav-icon">👤</div>
+            <div class="nav-icon">
+                <img src="./images/profile.webp" alt="profile">
+            </div>
             <div class="nav-label">Profil</div>
         </div>
     </div>

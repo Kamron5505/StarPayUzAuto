@@ -179,7 +179,54 @@
         tg.expand();
         tg.BackButton.show();
         tg.BackButton.onClick(() => tg.close());
+
+        function openStars() {
+            window.location.href = 'stars.html';
+        }
+
+        function openGifts() {
+            window.location.href = 'gift.html';
+        }
+
+        function openReyting() {
+            window.location.href = 'index.html';
+        }
+
+        function openProfile() {
+            window.location.href = 'index.html';
+        }
     </script>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openStars()">
+            <div class="nav-icon">
+                <img src="./images/home.webp" alt="home">
+            </div>
+            <div class="nav-label">Menu</div>
+        </div>
+
+        <div class="nav-item" onclick="openGifts()">
+            <div class="nav-icon">
+                <img src="./images/gift.webp" alt="Gifts">
+            </div>
+            <div class="nav-label">Gifts</div>
+        </div>
+
+        <div class="nav-item" onclick="openReyting()">
+            <div class="nav-icon">
+                <img src="./images/rating.webp" alt="Rating">
+            </div>
+            <div class="nav-label">Rating</div>
+        </div>
+
+        <div class="nav-item" onclick="openProfile()">
+            <div class="nav-icon">
+                <img src="./images/profile.webp" alt="profile">
+            </div>
+            <div class="nav-label">Profil</div>
+        </div>
+    </div>
 
     <style>
         .balance-display {
@@ -343,6 +390,62 @@
             font-size: 13px;
             color: var(--tg-theme-hint-color, #666);
             margin-bottom: 5px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            z-index: 50;
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, .05);
+            border-radius: 28px;
+            padding: 12px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            pointer-events: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 70px;
+            color: #9CA3AF;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .nav-item.active {
+            color: #3B82F6;
+        }
+
+        .nav-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+        }
+
+        .nav-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: inherit;
         }
     </style>
 </body>
