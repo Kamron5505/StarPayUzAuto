@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisobni to'ldirish - StarPayUz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Hisobni to'ldirish</h1>
+            <div class="balance-display">
+                <span class="balance-label">Joriy balans:</span>
+                <span class="balance-value" id="currentBalance">0 so'm</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="quick-amounts">
+                <h3>Tez to'ldirish:</h3>
+                <div class="amount-buttons">
+                    <button class="amount-btn" data-amount="10000">10,000 so'm</button>
+                    <button class="amount-btn" data-amount="25000">25,000 so'm</button>
+                    <button class="amount-btn" data-amount="50000">50,000 so'm</button>
+                    <button class="amount-btn" data-amount="100000">100,000 so'm</button>
+                    <button class="amount-btn" data-amount="250000">250,000 so'm</button>
+                    <button class="amount-btn" data-amount="500000">500,000 so'm</button>
+                </div>
+            </div>
+
+            <div class="custom-amount">
+                <h3>Yoki o'zingiz kiriting:</h3>
+                <div class="input-group">
+                    <input 
+                        type="number" 
+                        id="customAmount" 
+                        placeholder="Summa kiriting"
+                        min="10000"
+                        max="10000000"
+                        step="1000"
+                    >
+                    <span class="input-suffix">so'm</span>
+                </div>
+                <div class="input-hint">
+                    Minimal: 10,000 so'm | Maksimal: 10,000,000 so'm
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h3>To'lov usuli:</h3>
+                <div class="method-buttons">
+                    <button class="method-btn active" data-method="click">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%2300AAFF' width='100' height='40' rx='5'/%3E%3Ctext x='50' y='25' font-family='Arial' font-size='18' fill='white' text-anchor='middle'%3ECLICK%3C/text%3E%3C/svg%3E" alt="Click">
+                    </button>
+                    <button class="method-btn" data-method="payme">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%2300C896' width='100' height='40' rx='5'/%3E%3Ctext x='50' y='25' font-family='Arial' font-size='18' fill='white' text-anchor='middle'%3EPayme%3C/text%3E%3C/svg%3E" alt="Payme">
+                    </button>
+                    <button class="method-btn" data-method="uzum">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%237000FF' width='100' height='40' rx='5'/%3E%3Ctext x='50' y='25' font-family='Arial' font-size='18' fill='white' text-anchor='middle'%3EUzum%3C/text%3E%3C/svg%3E" alt="Uzum">
+                    </button>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" disabled>
+                To'lash
+            </button>
+
+            <div class="info-block">
+                <h4>ℹ️ Ma'lumot:</h4>
+                <ul>
+                    <li>To'lov avtomatik ravishda qayd qilinadi</li>
+                    <li>Balans darhol yangilanadi</li>
+                    <li>Xavfsiz to'lov tizimlari orqali</li>
+                    <li>Muammo bo'lsa: @StarPayUzAdmin</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        let selectedAmount = 0;
+        let selectedMethod = 'click';
+
+        // Load balance
+        loadUserBalance().then(balance => {
+            document.getElementById('currentBalance').textContent = 
+                balance.toLocaleString('uz-UZ') + ' so\'m';
+        });
+
+        // Quick amount buttons
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedAmount = parseInt(this.dataset.amount);
+                document.getElementById('customAmount').value = '';
+                updateSubmitButton();
+            });
+        });
+
+        // Custom amount input
+        document.getElementById('customAmount').addEventListener('input', function() {
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            selectedAmount = parseInt(this.value) || 0;
+            updateSubmitButton();
+        });
+
+        // Payment method buttons
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedMethod = this.dataset.method;
+            });
+        });
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('submitBtn');
+            if (selectedAmount >= 10000 && selectedAmount <= 10000000) {
+                btn.disabled = false;
+                btn.textContent = `${selectedAmount.toLocaleString('uz-UZ')} so'mni to'lash`;
+            } else {
+                btn.disabled = true;
+                btn.textContent = 'To\'lash';
+            }
+        }
+
+        // Submit payment
+        document.getElementById('submitBtn').addEventListener('click', async function() {
+            if (selectedAmount < 10000 || selectedAmount > 10000000) {
+                tg.showAlert('Summa 10,000 dan 10,000,000 so\'m oralig\'ida bo\'lishi kerak');
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = 'Yuklanmoqda...';
+
+            try {
+                const orderId = 'topup_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                const response = await fetch(`${window.API_BASE}/api/payment/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData
+                    },
+                    body: JSON.stringify({
+                        amount: selectedAmount,
+                        method: selectedMethod,
+                        order_id: orderId,
+                        telegram_id: tg.initDataUnsafe?.user?.id
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.ok && result.payment_url) {
+                    // Open payment URL
+                    tg.openLink(result.payment_url);
+                    tg.showAlert('To\'lov sahifasi ochildi. To\'lovni amalga oshiring va botga qayting.');
+                    tg.close();
+                } else {
+                    tg.showAlert(result.error || 'To\'lov yaratishda xatolik');
+                    this.disabled = false;
+                    updateSubmitButton();
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                tg.showAlert('Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.');
+                this.disabled = false;
+                updateSubmitButton();
+            }
+        });
+
+        // Telegram WebApp styling
+        tg.expand();
+        tg.BackButton.show();
+        tg.BackButton.onClick(() => tg.close());
+    </script>
+
+    <style>
+        .balance-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .quick-amounts h3,
+        .custom-amount h3,
+        .payment-methods h3 {
+            margin: 20px 0 15px;
+            font-size: 16px;
+            color: var(--tg-theme-text-color, #333);
+        }
+
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .amount-btn {
+            padding: 15px;
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, white);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .amount-btn:active {
+            transform: scale(0.95);
+        }
+
+        .amount-btn.active {
+            background: var(--tg-theme-bg-color, white);
+            color: var(--tg-theme-button-color, #3390ec);
+            border-color: var(--tg-theme-button-color, #3390ec);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            padding-right: 70px;
+            font-size: 18px;
+            border: 2px solid var(--tg-theme-button-color, #3390ec);
+            border-radius: 10px;
+            background: var(--tg-theme-bg-color, white);
+            color: var(--tg-theme-text-color, #333);
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--tg-theme-hint-color, #999);
+            font-size: 16px;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+            margin-bottom: 20px;
+        }
+
+        .method-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .method-btn {
+            padding: 10px;
+            background: var(--tg-theme-bg-color, white);
+            border: 2px solid var(--tg-theme-hint-color, #ddd);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .method-btn img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .method-btn.active {
+            border-color: var(--tg-theme-button-color, #3390ec);
+            box-shadow: 0 0 0 2px var(--tg-theme-button-color, #3390ec);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .submit-btn:not(:disabled):active {
+            transform: scale(0.98);
+        }
+
+        .info-block {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .info-block h4 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: var(--tg-theme-text-color, #333);
+        }
+
+        .info-block ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .info-block li {
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #666);
+            margin-bottom: 5px;
+        }
+    </style>
+</body>
+</html>

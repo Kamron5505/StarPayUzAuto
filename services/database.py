@@ -252,11 +252,27 @@ class _LegacyDB:
         pass
     
     async def create_order(self, order_id: str, user_id: int, product_type: str, amount: int, price: int):
-        return await create_order(user_id, product_type, "", amount, price, order_id, "pending")
+        telegram_id = user_id
+        return await create_order(telegram_id, product_type, "", amount, price, order_id, "pending")
+    
+    async def get_order(self, order_id: str):
+        # Get order by external_id
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            row = await conn.fetchrow(
+                "SELECT * FROM orders WHERE external_id = $1", order_id
+            )
+            return dict(row) if row else None
     
     async def update_order(self, order_id: str, **kwargs):
-        # Not implemented in services/database - orders are immutable after creation
-        pass
+        # Update order by external_id
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            if "status" in kwargs:
+                await conn.execute(
+                    "UPDATE orders SET status = $1 WHERE external_id = $2",
+                    kwargs["status"], order_id
+                )
     
     async def get_user_orders(self, user_id: int, limit: int = 10):
         return await get_user_orders(user_id, limit)

@@ -60,6 +60,38 @@ class FragmentAPIClient:
             "getInfo", {"username": username.lstrip("@")}
         )
 
+    async def create_payment(
+        self, 
+        amount: int, 
+        order_id: str, 
+        user_id: int,
+        description: str = "Hisobni to'ldirish"
+    ) -> Dict[str, Any]:
+        """
+        Create payment invoice via Fragment API Uz
+        Docs: https://fragment-api.uz/docs/payment
+        """
+        return await self._make_request(
+            "payment/create",
+            {
+                "shop_id": self.shop_id,
+                "amount": amount,
+                "order_id": order_id,
+                "user_id": user_id,
+                "description": description,
+                "currency": "UZS",
+            }
+        )
+
+    async def check_payment(self, order_id: str) -> Dict[str, Any]:
+        """
+        Check payment status
+        """
+        return await self._make_request(
+            "payment/status",
+            {"shop_id": self.shop_id, "order_id": order_id}
+        )
+
     def verify_callback(self, data: Dict) -> bool:
         received_signature = data.get("signature", "")
         sign_string = f"{data.get('order_id')}:{data.get('amount')}:{self.shop_key}"

@@ -255,6 +255,57 @@ async def api_order_phone(request: web.Request) -> web.Response:
     return web.json_response({"ok": False, "error": str(e)}, status=400)
 
 
+async def api_payment_create(request: web.Request) -> web.Response:
+  """Create payment invoice"""
+  auth = await _auth_user(request)
+  user_id = _user_id_from_auth(auth)
+  body = await _json_body(request)
+  
+  if not user_id:
+    user_id = body.get("telegram_id")
+  if not user_id:
+    return web.json_response({"ok": False, "error": "Unauthorized"}, status=401)
+
+  amount = body.get("amount")
+  method = body.get("method", "click")
+  order_id = body.get("order_id")
+  
+  if not amount or not order_id:
+    return web.json_response({"ok": False, "error": "Amount va order_id kerak"}, status=400)
+  
+  try:
+    amount_int = int(amount)
+    if amount_int < 10000 or amount_int > 10000000:
+      return web.json_response({"ok": False, "error": "Summa 10,000 dan 10,000,000 oralig'ida bo'lishi kerak"}, status=400)
+  except (TypeError, ValueError):
+    return web.json_response({"ok": False, "error": "Noto'g'ri summa"}, status=400)
+
+  # Create order in database
+  await create_order(int(user_id), "topup", "", amount_int, amount_int, order_id, "pending")
+  
+  # Import api_client to create payment
+  from api_client import api_client
+  
+  result = await api_client.create_payment(
+    amount=amount_int,
+    order_id=order_id,
+    user_id=int(user_id),
+    description=f"StarPayUz - Hisobni to'ldirish {amount_int:,} so'm"
+  )
+  
+  if result.get("ok") and result.get("payment_url"):
+    return web.json_response({
+      "ok": True,
+      "payment_url": result["payment_url"],
+      "order_id": order_id
+    })
+  else:
+    return web.json_response({
+      "ok": False,
+      "error": result.get("message", "To'lov yaratishda xatolik")
+    }, status=400)
+
+
 async def payment_webhook(request: web.Request) -> web.Response:
   try:
     payload = await request.json()
@@ -327,6 +378,7 @@ def create_app() -> web.Application:
   app.router.add_post("/api/order/premium", api_order_premium)
   app.router.add_post("/api/order/gift", api_order_gift)
   app.router.add_post("/api/order/phone", api_order_phone)
+  app.router.add_post("/api/payment/create", api_payment_create)
   app.router.add_post("/webhook/payment", payment_webhook)
   app.router.add_post("/api/webhook/payment", payment_webhook)
 

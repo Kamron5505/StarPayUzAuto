@@ -337,6 +337,13 @@
     <!-- ASOSIY Section -->
     <div class="section-title">📊 ASOSIY</div>
     <div class="menu-section">
+        <div class="menu-item" onclick="openBalance()">
+            <div class="menu-item-left">
+                <span class="menu-icon">💰</span>
+                <span class="menu-text">Hisobni to'ldirish</span>
+            </div>
+            <span class="menu-arrow">›</span>
+        </div>
         <div class="menu-item" onclick="openGiftlarim()">
             <div class="menu-item-left">
                 <span class="menu-icon">🎁</span>
@@ -471,6 +478,10 @@
 
         function openGifts() {
             window.location.href = 'gift.html';
+        }
+
+        function openBalance() {
+            window.location.href = 'balance.html';
         }
 
         function openGiftlarim() {
