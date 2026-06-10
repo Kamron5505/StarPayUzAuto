@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 import keyboards
-from database import db
+from services.database import db
 import config
 
 router = Router()

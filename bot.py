@@ -8,7 +8,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiohttp import web
 
 import config
-import database
+from services import database
 from handlers import start, shop, balance, profile, webapp, admin
 
 logging.basicConfig(

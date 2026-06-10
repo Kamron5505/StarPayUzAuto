@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 import keyboards
-from database import db
+from services.database import db
 import config
 import uuid
 from api_client import api_client

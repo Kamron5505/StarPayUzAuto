@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 
 import config
-from database import db
+from services.database import db
 
 router = Router()
 

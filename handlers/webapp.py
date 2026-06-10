@@ -9,7 +9,7 @@ from aiogram.types import Message
 import config
 import keyboards
 from api_client import api_client
-from database import db
+from services.database import db
 
 logger = logging.getLogger(__name__)
 router = Router()

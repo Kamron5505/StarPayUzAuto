@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 
 import config
-from database import db
+from services.database import db
 from api_client import api_client
 
 logging.basicConfig(level=logging.INFO)

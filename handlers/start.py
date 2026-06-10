@@ -6,7 +6,7 @@ from aiogram.utils.formatting import Text, Bold, as_list, as_marked_section
 from aiogram.enums import ParseMode
 import logging
 import keyboards
-from database import db
+from services.database import db
 from datetime import datetime
 
 logger = logging.getLogger(__name__)

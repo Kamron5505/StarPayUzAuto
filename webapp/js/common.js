@@ -34,10 +34,32 @@ function fillUsernameFromTelegram() {
 
 function loadUserBalance() {
     const balanceElement = document.getElementById('balance');
-    if (balanceElement) {
-        userBalance = 0;
-        balanceElement.textContent = userBalance.toLocaleString('uz-UZ') + " so'm";
+    if (!balanceElement) return;
+
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!userId) {
+        balanceElement.textContent = "0 so'm";
+        return;
     }
+
+    fetch(getApiBase() + '/api/user/balance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Telegram-Init-Data': tg.initData || '',
+        },
+        body: JSON.stringify({ telegram_id: userId, initData: tg.initData || '' }),
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.ok && data.balance !== undefined) {
+            userBalance = data.balance;
+            balanceElement.textContent = userBalance.toLocaleString('uz-UZ') + " so'm";
+        }
+    })
+    .catch(() => {
+        balanceElement.textContent = "0 so'm";
+    });
 }
 
 function formatNumber(num) {
@@ -126,7 +148,7 @@ async function submitOrder(payload, btnId) {
         }
     } catch (e) {
         setBuyButtonLoading(btnId, false);
-        tg.showAlert('❌ Tarmoq xatoligi. Internet aloqangizni tekshiring.');
+        tg.showAlert('❌ Tarmoq xatoligi: ' + (e.message || e.toString()) + ' | URL: ' + getApiBase() + endpoint);
     }
 }
 

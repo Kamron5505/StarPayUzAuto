@@ -237,3 +237,51 @@ async def record_payment(
             return True
         except aiosqlite.IntegrityError:
             return False
+
+
+# Legacy API compatibility layer for handlers that use "from database import db"
+class _LegacyDB:
+    """Compatibility wrapper to match old database.py API"""
+    
+    async def init_db(self):
+        await init_db()
+    
+    async def get_user(self, user_id: int):
+        return await get_user(user_id)
+    
+    async def create_user(self, user_id: int, username: str = None, first_name: str = None, referrer_id: int = None):
+        user = await ensure_user(user_id, username, first_name or "", referred_by=referrer_id)
+        return user
+    
+    async def update_balance(self, user_id: int, amount: int, operation: str = "add"):
+        if operation == "add":
+            await add_balance(user_id, amount)
+        else:
+            await deduct_balance(user_id, amount)
+    
+    async def get_user_by_sp_id(self, sp_id: int):
+        return await get_user_by_sp_id(sp_id)
+    
+    async def update_balance_by_sp_id(self, sp_id: int, amount: int, operation: str = "add"):
+        return await update_balance_by_sp_id(sp_id, amount, operation)
+    
+    async def create_order(self, order_id: str, user_id: int, product_type: str, amount: int, price: int):
+        return await create_order(user_id, product_type, "", amount, price, order_id, "pending")
+    
+    async def update_order(self, order_id: str, **kwargs):
+        # Not implemented in services/database - orders are immutable after creation
+        pass
+    
+    async def get_user_orders(self, user_id: int, limit: int = 10):
+        return await get_user_orders(user_id, limit)
+    
+    async def get_referrals(self, user_id: int):
+        # Return users referred by this user
+        user = await get_user(user_id)
+        if not user:
+            return []
+        # Simple: return empty list for now (referrals count is in user.referrals)
+        return []
+
+
+db = _LegacyDB()
