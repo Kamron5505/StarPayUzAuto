@@ -265,6 +265,10 @@ class _LegacyDB:
     async def update_balance_by_sp_id(self, sp_id: int, amount: int, operation: str = "add"):
         return await update_balance_by_sp_id(sp_id, amount, operation)
     
+    async def update_user_activity(self, user_id: int):
+        # Not needed in new schema - can be a no-op
+        pass
+    
     async def create_order(self, order_id: str, user_id: int, product_type: str, amount: int, price: int):
         return await create_order(user_id, product_type, "", amount, price, order_id, "pending")
     

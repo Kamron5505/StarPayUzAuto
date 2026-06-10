@@ -25,7 +25,7 @@ class FragmentAPI:
         api_key: str | None = None,
         base_url: str | None = None,
     ):
-        self.api_key = api_key or settings.fragment_api_key
+        self.api_key = (api_key or settings.fragment_api_key or "").strip()
         self.base_url = (base_url or settings.fragment_api_base).rstrip("/")
 
     def _headers(self) -> dict[str, str]:
