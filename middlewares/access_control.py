@@ -34,9 +34,9 @@ class AccessControlMiddleware(BaseMiddleware):
             # Доступ запрещен - отправляем сообщение
             if isinstance(event, Update) and event.message:
                 await event.message.answer(
-                    "🚫 <b>Доступ запрещен</b>\n\n"
-                    "Этот бот находится в режиме тестирования и доступен только авторизованным пользователям.\n\n"
-                    "По вопросам доступа обращайтесь: @StarPayUzAdmin",
+                    "🚫 <b>Kirish taqiqlangan</b>\n\n"
+                    "Bu bot test rejimida va faqat ruxsat etilgan foydalanuvchilar uchun mavjud.\n\n"
+                    "Kirish uchun murojaat qiling: @StarPayUzAdmin",
                     parse_mode="HTML"
                 )
             return  # Прерываем обработку
