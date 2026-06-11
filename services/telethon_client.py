@@ -77,23 +77,34 @@ class TelethonGiftSender:
                     "error": f"Username @{username} topilmadi",
                 }
 
-            # Отправляем подарок через SendGift API
-            result = await self.client(
-                functions.messages.SendGiftRequest(
-                    user_id=user,
-                    gift_id=gift_sticker_id,
-                    private=False,  # Публичный подарок (виден в профиле)
-                    message=message,
+            # Отправляем подарок как premium gift (через messages.sendMedia)
+            from telethon.tl.functions.messages import SendMediaRequest
+            from telethon.tl.types import InputMediaPremiumGift
+            
+            try:
+                result = await self.client(
+                    SendMediaRequest(
+                        peer=user,
+                        media=InputMediaPremiumGift(),
+                        message=message or "🎁",
+                        random_id=self.client._get_random_id(),
+                    )
                 )
-            )
-
-            logger.info(f"Gift sent to @{username}: {gift_sticker_id}")
-            return {
-                "ok": True,
-                "username": username,
-                "gift_id": gift_sticker_id,
-                "result": str(result),
-            }
+                
+                logger.info(f"Gift sent to @{username}: {gift_sticker_id}")
+                return {
+                    "ok": True,
+                    "username": username,
+                    "gift_id": gift_sticker_id,
+                    "result": str(result),
+                }
+            except AttributeError:
+                # Если InputMediaPremiumGift не доступен, пробуем альтернативный метод
+                logger.warning("InputMediaPremiumGift not available, gift sending may not be supported")
+                return {
+                    "ok": False,
+                    "error": "Gift отправка не поддерживается в текущей версии Telegram API",
+                }
 
         except FloodWaitError as e:
             logger.error(f"FloodWait: need to wait {e.seconds}s")
