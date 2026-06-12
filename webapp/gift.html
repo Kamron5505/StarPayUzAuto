@@ -36,14 +36,11 @@
         .selected-gift-info strong { color: #3B82F6; }
 
         /* Swiper Styles */
-        .swiper { width: 100%; padding: 20px 0 50px 0; margin-bottom: 20px; }
-        .swiper-slide { display: flex; justify-content: center; align-items: center; }
-        .swiper-pagination { bottom: 10px !important; }
-        .swiper-pagination-bullet { background: #3B82F6; opacity: 0.5; width: 8px; height: 8px; }
-        .swiper-pagination-bullet-active { opacity: 1; width: 24px; border-radius: 4px; }
+        .swiper { width: 100%; padding: 20px 0; margin-bottom: 20px; overflow: hidden; }
+        .swiper-slide { display: flex; justify-content: center; align-items: center; width: auto !important; }
+        .swiper-pagination { display: none; }  /* Скрываем точки */
 
-        .gift-slide { display: flex; gap: 15px; justify-content: center; }
-        .gift-card { background: #111827; border: 2px solid #3B82F6; border-radius: 22px; padding: 20px; text-align: center; cursor: pointer; transition: .3s; width: 140px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .gift-card { background: #111827; border: none; border-radius: 22px; padding: 20px; text-align: center; cursor: pointer; transition: .3s; width: 140px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .gift-card:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(59, 130, 246, .4); }
         .gift-card.selected { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); box-shadow: 0 0 30px rgba(59, 130, 246, .5); }
         .gift-emoji { font-size: 48px; margin-bottom: 12px; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; }
@@ -118,92 +115,94 @@
             <div class="swiper-wrapper">
                 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'heart', 3000)">
-                            <div class="gift-emoji"><img src="./images/heart.webp" alt="Heart"></div>
-                            <div class="gift-name">Yurak</div>
-                            <div class="gift-price">3 000 so'm</div>
-                        </div>
-                        <div class="gift-card" onclick="pickGift(this, 'bear', 3000)">
-                            <div class="gift-emoji"><img src="./images/bear.webp" alt="Bear"></div>
-                            <div class="gift-name">Ayiq</div>
-                            <div class="gift-price">3 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'heart', 3000)">
+                        <div class="gift-emoji"><img src="./images/heart.webp" alt="Heart"></div>
+                        <div class="gift-name">Yurak</div>
+                        <div class="gift-price">3 000 so'm</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'box', 5000)">
-                            <div class="gift-emoji"><img src="./images/box.webp" alt="Box"></div>
-                            <div class="gift-name">Quti</div>
-                            <div class="gift-price">5 000 so'm</div>
-                        </div>
-                        <div class="gift-card" onclick="pickGift(this, 'rose', 5000)">
-                            <div class="gift-emoji"><img src="./images/rose.webp" alt="Rose"></div>
-                            <div class="gift-name">Atirgul</div>
-                            <div class="gift-price">5 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'bear', 3000)">
+                        <div class="gift-emoji"><img src="./images/bear.webp" alt="Bear"></div>
+                        <div class="gift-name">Ayiq</div>
+                        <div class="gift-price">3 000 so'm</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'cake', 10000)">
-                            <div class="gift-emoji"><img src="./images/cake.webp" alt="Cake"></div>
-                            <div class="gift-name">Tort</div>
-                            <div class="gift-price">10 000 so'm</div>
-                        </div>
-                        <div class="gift-card" onclick="pickGift(this, 'rocket', 10000)">
-                            <div class="gift-emoji"><img src="./images/rocket.webp" alt="Rocket"></div>
-                            <div class="gift-name">Raketa</div>
-                            <div class="gift-price">10 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'box', 5000)">
+                        <div class="gift-emoji"><img src="./images/box.webp" alt="Box"></div>
+                        <div class="gift-name">Quti</div>
+                        <div class="gift-price">5 000 so'm</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'champagne', 10000)">
-                            <div class="gift-emoji"><img src="./images/shampen.webp" alt="Champagne"></div>
-                            <div class="gift-name">Shampan</div>
-                            <div class="gift-price">10 000 so'm</div>
-                        </div>
-                        <div class="gift-card" onclick="pickGift(this, 'bouquet', 10000)">
-                            <div class="gift-emoji"><img src="./images/bouqet.webp" alt="Bouquet"></div>
-                            <div class="gift-name">Guldasta</div>
-                            <div class="gift-price">10 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'rose', 5000)">
+                        <div class="gift-emoji"><img src="./images/rose.webp" alt="Rose"></div>
+                        <div class="gift-name">Atirgul</div>
+                        <div class="gift-price">5 000 so'm</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'diamond', 20000)">
-                            <div class="gift-emoji"><img src="./images/diamond.webp" alt="Diamond"></div>
-                            <div class="gift-name">Olmos</div>
-                            <div class="gift-price">20 000 so'm</div>
-                        </div>
-                        <div class="gift-card" onclick="pickGift(this, 'trophy', 20000)">
-                            <div class="gift-emoji"><img src="./images/trophy.webp" alt="Trophy"></div>
-                            <div class="gift-name">Kubok</div>
-                            <div class="gift-price">20 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'cake', 10000)">
+                        <div class="gift-emoji"><img src="./images/cake.webp" alt="Cake"></div>
+                        <div class="gift-name">Tort</div>
+                        <div class="gift-price">10 000 so'm</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
-                    <div class="gift-slide">
-                        <div class="gift-card" onclick="pickGift(this, 'ring', 20000)">
-                            <div class="gift-emoji"><img src="./images/ring.webp" alt="Ring"></div>
-                            <div class="gift-name">Uzuk</div>
-                            <div class="gift-price">20 000 so'm</div>
-                        </div>
+                    <div class="gift-card" onclick="pickGift(this, 'rocket', 10000)">
+                        <div class="gift-emoji"><img src="./images/rocket.webp" alt="Rocket"></div>
+                        <div class="gift-name">Raketa</div>
+                        <div class="gift-price">10 000 so'm</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="gift-card" onclick="pickGift(this, 'champagne', 10000)">
+                        <div class="gift-emoji"><img src="./images/shampen.webp" alt="Champagne"></div>
+                        <div class="gift-name">Shampan</div>
+                        <div class="gift-price">10 000 so'm</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="gift-card" onclick="pickGift(this, 'bouquet', 10000)">
+                        <div class="gift-emoji"><img src="./images/bouqet.webp" alt="Bouquet"></div>
+                        <div class="gift-name">Guldasta</div>
+                        <div class="gift-price">10 000 so'm</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="gift-card" onclick="pickGift(this, 'diamond', 20000)">
+                        <div class="gift-emoji"><img src="./images/diamond.webp" alt="Diamond"></div>
+                        <div class="gift-name">Olmos</div>
+                        <div class="gift-price">20 000 so'm</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="gift-card" onclick="pickGift(this, 'trophy', 20000)">
+                        <div class="gift-emoji"><img src="./images/trophy.webp" alt="Trophy"></div>
+                        <div class="gift-name">Kubok</div>
+                        <div class="gift-price">20 000 so'm</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="gift-card" onclick="pickGift(this, 'ring', 20000)">
+                        <div class="gift-emoji"><img src="./images/ring.webp" alt="Ring"></div>
+                        <div class="gift-name">Uzuk</div>
+                        <div class="gift-price">20 000 so'm</div>
                     </div>
                 </div>
 
             </div>
-            <div class="swiper-pagination"></div>
         </div>
 
         <!-- NFT Gifts Section -->
@@ -325,18 +324,17 @@
     <script>
         // Initialize Swiper
         const swiper = new Swiper('.mySwiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
+            slidesPerView: 'auto',  // Автоматический размер
+            spaceBetween: 20,  // 20px между карточками
             loop: true,  // Бесконечная прокрутка
+            centeredSlides: false,  // Не центрировать
             autoplay: {
-                delay: 3000,  // 3 секунды
-                disableOnInteraction: false,  // Продолжает после взаимодействия
+                delay: 0,  // Без задержки
+                disableOnInteraction: false,
             },
-            speed: 800,  // Плавная анимация
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
+            speed: 3000,  // Медленная непрерывная прокрутка
+            freeMode: true,  // Свободное движение
+            freeModeMomentum: false,  // Без инерции
         });
 
         let selectedGift = null;
