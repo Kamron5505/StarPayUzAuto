@@ -259,31 +259,35 @@ async def api_order_gift(request: web.Request) -> web.Response:
   if not gift_id:
     return web.json_response({"ok": False, "error": f"Noma'lum gift: {gift}"}, status=400)
   
-  # Send gift via Bot API (not Telethon!)
-  from aiogram import Bot
-  from aiogram.client.default import DefaultBotProperties
-  from aiogram.enums import ParseMode
+  # Send gift via Telethon (MTProto)
+  from services.telethon_client import gift_sender
   
-  if not settings.bot_token:
+  if not gift_sender:
     return web.json_response({
       "ok": False,
-      "error": "Bot token не настроен"
+      "error": "Gift sender не инициализирован. Проверьте настройки Telethon."
     }, status=503)
   
-  bot = Bot(
-    token=settings.bot_token,
-    default=DefaultBotProperties(parse_mode=ParseMode.HTML),
-  )
-  
   try:
-    logger.info(f"Sending gift {gift} (ID: {gift_id}) to @{username} via Bot API")
+    logger.info(f"Sending gift {gift} (ID: {gift_id}) to @{username} via Telethon MTProto")
     
-    # Отправляем подарок через Bot API
-    result = await bot.send_gift(
-      user_id=int(user_id),  # От кого (наш пользователь)
-      gift_id=gift_id,
-      text=f"🎁 Gift from @{username}!",
+    # Отправляем подарок через Telethon
+    result = await gift_sender.send_gift(
+      username=username,
+      gift_sticker_id=gift_id,
+      message=f"🎁 Sovg'a"
     )
+    
+    if not result.get("ok"):
+      logger.error(f"Gift sending failed: {result.get('error')}")
+      # Create failed order
+      order_id = await create_order(
+        int(user_id), "gift", username, None, price, gift_id, "failed"
+      )
+      return web.json_response({
+        "ok": False,
+        "error": result.get("error", "Gift yuborishda xatolik")
+      }, status=400)
     
     logger.info(f"Gift sent successfully: {result}")
     
@@ -298,7 +302,7 @@ async def api_order_gift(request: web.Request) -> web.Response:
     return web.json_response({
       "ok": True,
       "order_id": order_id,
-      "message": f"Gift yuborildi: {gift.capitalize()} → @{username}"
+      "message": f"🎁 {gift.capitalize()} sovg'asi @{username} ga yuborildi!"
     })
     
   except Exception as e:
@@ -313,9 +317,6 @@ async def api_order_gift(request: web.Request) -> web.Response:
       "ok": False,
       "error": f"Xatolik: {str(e)}"
     }, status=400)
-  
-  finally:
-    await bot.session.close()
 
 
 async def api_order_phone(request: web.Request) -> web.Response:

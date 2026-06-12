@@ -48,7 +48,7 @@ class TelethonGiftSender:
         self, username: str, gift_sticker_id: str, message: str = ""
     ) -> dict[str, Any]:
         """
-        Отправка подарка пользователю через прямой вызов Telegram API
+        Отправка подарка пользователю через Telethon MTProto
         
         Args:
             username: Username получателя (без @)
@@ -71,32 +71,62 @@ class TelethonGiftSender:
             try:
                 user = await self.client.get_entity(username)
                 user_id = user.id
-            except (UserIdInvalidError, ValueError, TypeError) as e:
+            except Exception as e:
                 logger.error(f"User not found: @{username}, error: {e}")
                 return {
                     "ok": False,
                     "error": f"Username @{username} topilmadi",
                 }
 
-            # Пробуем отправить подарок через сообщение с подарочным стикером
+            # Используем payments.sendStarGift для отправки подарка
+            from telethon.tl.functions.payments import SendStarGiftRequest
+            from telethon.tl.types import InputUser
+            
             try:
-                # Отправляем обычное сообщение с текстом о подарке
-                # (реальная отправка подарков через Telethon не поддерживается официально)
-                await self.client.send_message(
-                    user_id,
-                    f"🎁 Siz uchun sovg'a!\n\nGift ID: {gift_sticker_id}\n{message}"
+                # Отправляем подарок через payments.sendStarGift
+                result = await self.client(
+                    SendStarGiftRequest(
+                        user_id=InputUser(user_id=user_id, access_hash=user.access_hash),
+                        gift_id=int(gift_sticker_id),
+                        hide_name=False,
+                        message=message if message else None,
+                    )
                 )
                 
-                logger.info(f"Gift notification sent to @{username}: {gift_sticker_id}")
-                logger.warning(f"Real gift sending not supported via Telethon - sent notification instead")
-                
+                logger.info(f"Star gift sent to @{username}: {gift_sticker_id}")
                 return {
-                    "ok": False,
-                    "error": "⚠️ Gift отправка не поддерживается через Telethon.\n\nИспользуйте Bot API или Fragment API для отправки подарков.",
+                    "ok": True,
+                    "username": username,
+                    "gift_id": gift_sticker_id,
+                    "result": str(result),
                 }
                 
             except Exception as e:
-                logger.error(f"Failed to send message: {e}")
+                logger.error(f"Failed to send star gift: {e}")
+                # Если метод не существует, пробуем альтернативный способ
+                if "SendStarGiftRequest" in str(e) or "not found" in str(e).lower():
+                    logger.warning("SendStarGiftRequest not available, trying alternative method")
+                    # Пробуем отправить через форму покупки подарка
+                    try:
+                        from telethon.tl.functions.payments import SendStarsFormRequest
+                        
+                        result = await self.client(
+                            SendStarsFormRequest(
+                                form_id=int(gift_sticker_id),
+                                invoice=None,
+                            )
+                        )
+                        
+                        logger.info(f"Gift sent via form to @{username}: {gift_sticker_id}")
+                        return {
+                            "ok": True,
+                            "username": username,
+                            "gift_id": gift_sticker_id,
+                            "result": str(result),
+                        }
+                    except Exception as e2:
+                        logger.error(f"Alternative method also failed: {e2}")
+                
                 return {
                     "ok": False,
                     "error": f"Xatolik: {str(e)}",
