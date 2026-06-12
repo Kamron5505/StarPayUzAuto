@@ -149,35 +149,6 @@
         color: #9CA3AF;
     }
 
-    .toggle-switch {
-        width: 51px;
-        height: 31px;
-        background: #1E293B;
-        border-radius: 16px;
-        position: relative;
-        cursor: pointer;
-        transition: .3s;
-    }
-
-    .toggle-switch.active {
-        background: #3B82F6;
-    }
-
-    .toggle-circle {
-        width: 27px;
-        height: 27px;
-        background: #fff;
-        border-radius: 50%;
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        transition: .3s;
-    }
-
-    .toggle-switch.active .toggle-circle {
-        left: 22px;
-    }
-
     .referral-card {
         background: #111827;
         border: 2px solid #3B82F6;
@@ -310,7 +281,7 @@
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="profile-avatar">👤</div>
-        <div class="profile-name" id="profileName">StarPayUz — Admin</div>
+        <div class="profile-name" id="profileName">StarPayUz</div>
         <div class="profile-username" id="profileUsername">@StarPayUzAdmin</div>
     </div>
 
@@ -370,15 +341,6 @@
     <!-- SOZLAMALAR Section -->
     <div class="section-title">⚙️ SOZLAMALAR</div>
     <div class="menu-section">
-        <div class="menu-item">
-            <div class="menu-item-left">
-                <span class="menu-icon">🌙</span>
-                <span class="menu-text">Tun rejimi</span>
-            </div>
-            <div class="toggle-switch active" onclick="toggleDarkMode(event)">
-                <div class="toggle-circle"></div>
-            </div>
-        </div>
         <div class="menu-item" onclick="openSupport()">
             <div class="menu-item-left">
                 <span class="menu-icon">🔔</span>
@@ -452,16 +414,10 @@
     <script>
         const initData = tg.initDataUnsafe;
         if (initData.user) {
-            document.getElementById('profileName').textContent = initData.user.first_name + ' — Admin';
+            document.getElementById('profileName').textContent = initData.user.first_name;
             if (initData.user.username) {
                 document.getElementById('profileUsername').textContent = '@' + initData.user.username;
             }
-        }
-
-        function toggleDarkMode(event) {
-            event.stopPropagation();
-            const toggle = event.currentTarget;
-            toggle.classList.toggle('active');
         }
 
         function shareReferral() {
@@ -497,11 +453,11 @@
         }
 
         function openSupport() {
-            tg.openTelegramLink('https://t.me/StarPayUz_Admin');
+            tg.openTelegramLink('https://t.me/StarPayUzAdmin');
         }
 
         function openChannel() {
-            tg.openTelegramLink('https://t.me/StarPayUz_Channel');
+            tg.openTelegramLink('https://t.me/StarPayUzNews');
         }
     </script>
 </body>
