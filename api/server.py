@@ -528,6 +528,27 @@ async def api_payment_check(request: web.Request) -> web.Response:
       })
 
 
+async def api_get_available_gifts(request: web.Request) -> web.Response:
+  """Get list of available Star Gifts from Telegram"""
+  from services.telethon_client import gift_sender
+  
+  if not gift_sender:
+    return web.json_response({
+      "ok": False,
+      "error": "Gift sender не инициализирован"
+    }, status=503)
+  
+  try:
+    result = await gift_sender.get_available_gifts()
+    return web.json_response(result)
+  except Exception as e:
+    logger.exception(f"Failed to get available gifts: {e}")
+    return web.json_response({
+      "ok": False,
+      "error": str(e)
+    }, status=500)
+
+
 async def on_startup(app: web.Application) -> None:
   from services.database import init_db
 
@@ -549,6 +570,7 @@ def create_app() -> web.Application:
   app.router.add_post("/api/payment/check", api_payment_check)
   app.router.add_post("/webhook/payment", payment_webhook)
   app.router.add_post("/api/webhook/payment", payment_webhook)
+  app.router.add_get("/api/gifts/available", api_get_available_gifts)
 
   app.router.add_static("/app", WEBAPP_DIR, name="webapp")
   app.router.add_static("/", WEBAPP_DIR, name="root")
