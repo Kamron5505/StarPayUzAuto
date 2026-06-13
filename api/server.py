@@ -265,6 +265,17 @@ async def api_order_gift(request: web.Request) -> web.Response:
     "star_crown": "5170145012310081618",       # Star Crown - 500 stars
     "blue_gem": "5170145012310081619",         # Blue Gem - 1000 stars
     "fire_phoenix": "5170145012310081620",     # Fire Phoenix - 2500 stars
+    
+    # Limited Edition gifts (removed Telegram gifts)
+    "newyear_tree": "5922558454332916696",       # New Year Tree - 50 stars
+    "newyear_bear": "5956217000635139069",       # New Year Bear - 50 stars
+    "valentine_heart": "5801108895304779062",    # Valentine Heart - 50 stars
+    "valentine_bear": "5800655655995968830",     # Valentine Bear - 50 stars
+    "march8_bear": "5866352046986232958",        # March 8 Bear - 50 stars
+    "patrick_bear": "5893356958802511476",       # St. Patrick Bear - 50 stars
+    "april_bear": "5935895822435615975",         # April Fools Bear - 50 stars
+    "easter_bear": "5969796561943660080",        # Easter Bear - 50 stars
+    "may_bear": "6026193266406327981",           # May Day Bear - 50 stars
   }
   
   gift_id = gift_mapping.get(gift.lower())

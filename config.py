@@ -104,6 +104,17 @@ PRODUCTS = {
             {"id": "star_crown", "name": "Yulduz Toj", "price": 200000, "emoji": "👑✨", "stars": 500, "tier": "premium", "limited": True},
             {"id": "blue_gem", "name": "Ko'k Javohir", "price": 250000, "emoji": "💠", "stars": 1000, "tier": "premium", "limited": True},
             {"id": "fire_phoenix", "name": "Olovli Qanot", "price": 500000, "emoji": "🔥🦅", "stars": 2500, "tier": "exclusive", "limited": True},
+            
+            # Cheklangan sovg'alar (Limited Edition)
+            {"id": "newyear_tree", "name": "Yangi yil archasi", "price": 10500, "emoji": "🎄", "stars": 50, "tier": "limited"},
+            {"id": "newyear_bear", "name": "Yangi yil ayiqchasi", "price": 10500, "emoji": "🧸", "stars": 50, "tier": "limited"},
+            {"id": "valentine_heart", "name": "Sevgi yuragi", "price": 10500, "emoji": "💜", "stars": 50, "tier": "limited"},
+            {"id": "valentine_bear", "name": "Sevgi ayiqchasi", "price": 10500, "emoji": "🧸💜", "stars": 50, "tier": "limited"},
+            {"id": "march8_bear", "name": "8-mart ayiqchasi", "price": 10500, "emoji": "🧸🌷", "stars": 50, "tier": "limited"},
+            {"id": "patrick_bear", "name": "Sent-Patrik ayiqchasi", "price": 10500, "emoji": "🧸☘️", "stars": 50, "tier": "limited"},
+            {"id": "april_bear", "name": "1-aprel ayiqchasi", "price": 10500, "emoji": "🧸🎉", "stars": 50, "tier": "limited"},
+            {"id": "easter_bear", "name": "Pasxa ayiqchasi", "price": 10500, "emoji": "🧸🐣", "stars": 50, "tier": "limited"},
+            {"id": "may_bear", "name": "1-may ayiqchasi", "price": 10500, "emoji": "🧸🌼", "stars": 50, "tier": "limited"},
         ]
     }
 }
