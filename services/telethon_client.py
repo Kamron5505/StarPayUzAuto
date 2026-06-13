@@ -68,22 +68,31 @@ class TelethonGiftSender:
         username = username.lstrip("@")
 
         try:
-            # Получаем пользователя (InputPeer)
-            # Сначала пробуем кэш, потом резолвим через API
+            # Пытаемся получить InputPeer пользователя через ResolveUsername
+            # Это самый надёжный способ найти пользователя в MTProto
             try:
+                resolved = await self.client(
+                    functions.contacts.ResolveUsernameRequest(username=username)
+                )
+                if resolved.peer and resolved.users:
+                    user = resolved.users[0]
+                    receiver_peer = await self.client.get_input_entity(user.id)
+                    logger.info(f"Resolved @{username} via ResolveUsername: id={user.id}")
+                else:
+                    raise ValueError(f"ResolveUsername returned no peer for @{username}")
+            except Exception as e:
+                logger.warning(f"ResolveUsername failed for @{username}: {e}, trying fallback...")
+                # Fallback: пробуем get_entity
                 try:
-                    receiver_peer = await self.client.get_input_entity(username)
-                except Exception:
-                    # Если нет в кэше — резолвим через API Telegram
                     entity = await self.client.get_entity(username)
                     receiver_peer = await self.client.get_input_entity(entity)
-                logger.info(f"Got receiver peer for @{username}: {receiver_peer}")
-            except Exception as e:
-                logger.error(f"User not found: @{username}, error: {e}")
-                return {
-                    "ok": False,
-                    "error": f"Username @{username} topilmadi",
-                }
+                    logger.info(f"Got peer for @{username} via get_entity fallback")
+                except Exception as e2:
+                    logger.error(f"User not found: @{username}, error: {e2}")
+                    return {
+                        "ok": False,
+                        "error": f"Username @{username} topilmadi",
+                    }
 
             # Создаем инвойс для подарка
             from telethon.tl.types import InputInvoiceStarGift

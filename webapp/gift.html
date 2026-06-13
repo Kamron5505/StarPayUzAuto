@@ -724,18 +724,28 @@
         }
 
         function buyGift() {
-            // Безопасное получение юзернейма напрямую из DOM, если функции getUsername нет
+            // Безопасное получение юзернейма напрямую из DOM
             const usernameInput = document.getElementById('username');
             const username = usernameInput ? usernameInput.value.trim() : '';
 
             if (!username) {
-                if (tg) tg.showAlert('Iltimos, username kiriting!');
-                else alert('Iltimos, username kiriting!');
+                if (tg) {
+                    tg.showPopup({
+                        title: 'Xatolik',
+                        message: 'Iltimos, username kiriting!',
+                        buttons: [{ type: 'close' }]
+                    });
+                } else alert('Iltimos, username kiriting!');
                 return;
             }
             if (!selectedGift) {
-                if (tg) tg.showAlert('Gift tanlang!');
-                else alert('Gift tanlang!');
+                if (tg) {
+                    tg.showPopup({
+                        title: 'Xatolik',
+                        message: 'Gift tanlang!',
+                        buttons: [{ type: 'close' }]
+                    });
+                } else alert('Gift tanlang!');
                 return;
             }
 

@@ -144,11 +144,19 @@ async function submitOrder(payload, btnId) {
             }, () => tg.close());
         } else {
             setBuyButtonLoading(btnId, false);
-            tg.showAlert('❌ Xatolik: ' + (result.error || 'Qayta urinib ko\'ring'));
+            tg.showPopup({
+                title: '❌ Xatolik',
+                message: result.error || 'Qayta urinib ko\'ring',
+                buttons: [{ type: 'close' }]
+            });
         }
     } catch (e) {
         setBuyButtonLoading(btnId, false);
-        tg.showAlert('❌ Tarmoq xatoligi: ' + (e.message || e.toString()) + ' | URL: ' + getApiBase() + endpoint);
+        tg.showPopup({
+            title: '❌ Tarmoq xatoligi',
+            message: e.message || 'Qayta urinib ko\'ring',
+            buttons: [{ type: 'close' }]
+        });
     }
 }
 
