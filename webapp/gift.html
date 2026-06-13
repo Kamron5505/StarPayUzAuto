@@ -697,14 +697,17 @@
             tg.expand();
         }
 
-        // Инициализация Swiper слайдера
+        // Инициализация Swiper слайдера (бесконечная карусель)
         const swiper = new Swiper('.mySwiper', {
             slidesPerView: 'auto',
             spaceBetween: 15,
             grabCursor: true,
-            touchRatio: 1,
-            resistance: true,
-            resistanceRatio: 0.85
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            speed: 600
         });
 
         let selectedGift = null;
