@@ -290,7 +290,7 @@ async def cmd_admin(message: Message):
     user_id = message.from_user.id
     
     # Check if user is admin
-    from config import ADMINS
+    from config import ADMINS, ADMIN_PANEL_URL
     if user_id not in ADMINS:
         await message.answer(
             "❌ <b>Bu buyruq faqat administratorlar uchun.</b>",
@@ -298,7 +298,7 @@ async def cmd_admin(message: Message):
         )
         return
     
-    admin_panel_url = os.getenv("ADMIN_PANEL_URL", "http://localhost:8000")
+    admin_panel_url = ADMIN_PANEL_URL
     
     from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
     

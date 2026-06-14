@@ -35,6 +35,9 @@ WEBAPP_URL = os.getenv("WEBAPP_URL", "https://starpayuz-webapp.vercel.app")
 # Admin IDs
 ADMINS = [8784918764]
 
+# Admin Panel URL
+ADMIN_PANEL_URL = os.getenv("ADMIN_PANEL_URL", "http://localhost:8000")
+
 # Allowed usernames (for access control) - comma separated
 ALLOWED_USERNAMES = os.getenv("ALLOWED_USERNAMES", "StarPayUzAdmin").split(",")
 # Пример: ALLOWED_USERNAMES=StarPayUzAdmin,user2,user3

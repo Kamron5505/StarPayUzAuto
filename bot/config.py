@@ -28,6 +28,7 @@ class Settings:
     custom_emoji_premium: str | None
     custom_emoji_gift: str | None
     custom_emoji_phone: str | None
+    admin_panel_url: str
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -52,6 +53,7 @@ class Settings:
             custom_emoji_premium=os.getenv("CUSTOM_EMOJI_PREMIUM") or None,
             custom_emoji_gift=os.getenv("CUSTOM_EMOJI_GIFT") or None,
             custom_emoji_phone=os.getenv("CUSTOM_EMOJI_PHONE") or None,
+            admin_panel_url=os.getenv("ADMIN_PANEL_URL", "http://localhost:8000"),
         )
 
 

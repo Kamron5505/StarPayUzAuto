@@ -61,7 +61,7 @@ async def cmd_admin(message: Message) -> None:
         )
         return
 
-    admin_panel_url = "http://localhost:8000"
+    admin_panel_url = settings.admin_panel_url
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
