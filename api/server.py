@@ -532,6 +532,9 @@ async def payment_webhook(request: web.Request) -> web.Response:
     from aiogram.enums import ParseMode
 
     if settings.bot_token:
+      check_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_check}">✅</tg-emoji>' if settings.custom_emoji_check else "✅"
+      premium_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_premium}">💎</tg-emoji>' if settings.custom_emoji_premium else "💎"
+      money_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_money}">💰</tg-emoji>' if settings.custom_emoji_money else "💰"
       bot = Bot(
         token=settings.bot_token,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
@@ -539,10 +542,9 @@ async def payment_webhook(request: web.Request) -> web.Response:
       try:
         await bot.send_message(
           user_int,
-          f"🎊 <b>Tabriklaymiz!</b> 🎉\n\n"
-          f"💸 <b>+{amount_int:,}</b> so'm\n"
-          f"💰 Balans: <b>{new_balance:,}</b> so'm\n\n"
-          f"✅ To'lov muvaffaqiyatli qabul qilindi",
+          f"{check_emoji} To'lov muvaffaqiyatli qabul qilindi\n\n"
+          f"{premium_emoji} +{amount_int:,} so'm\n"
+          f"{money_emoji} Balans: {new_balance:,} so'm",
         )
       except Exception as e:
         logger.warning("Could not notify user %s: %s", user_int, e)

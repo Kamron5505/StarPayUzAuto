@@ -6,6 +6,7 @@ import keyboards
 from services.database import db
 import uuid
 from api_client import api_client
+from bot.config import settings
 
 router = Router()
 
@@ -58,12 +59,16 @@ async def process_topup_amount(message: Message, state: FSMContext):
         
         await db.create_order(order_id, user_id, "topup", int(amount), amount)
         
-        # Create payment link
+        # Create payment link with callback URL for webhook
+        callback_url = f"{settings.webapp_base_url}/webhook/payment"
+        redirect_url = f"{settings.webapp_base_url}/payment/success"
         payment_result = await api_client.create_payment(
             amount=amount,
             order_id=order_id,
             user_id=user_id,
-            description=f"Hisobni to'ldirish - {amount:,.0f} so'm"
+            description=f"Hisobni to'ldirish - {amount:,.0f} so'm",
+            callback_url=callback_url,
+            redirect_url=redirect_url,
         )
         
         if payment_result and (payment_result.get("ok") or payment_result.get("success") or payment_result.get("payment_url")):
@@ -120,13 +125,14 @@ async def check_payment_status(callback: CallbackQuery):
             await db.update_order(order_id, status="completed")
             
             # Update user balance
-            await db.update_balance(order['user_id'], order['price'], 'add')
+            # order keys: telegram_id, amount (not user_id, price)
+            await db.update_balance(order['telegram_id'], order['amount'], 'add')
             
-            user = await db.get_user(order['user_id'])
+            user = await db.get_user(order['telegram_id'])
             
             await callback.message.edit_text(
                 f"✅ <b>To'lov muvaffaqiyatli!</b>\n\n"
-                f"Hisobingizga {order['price']:,.0f} so'm qo'shildi.\n"
+                f"Hisobingizga {order['amount']:,.0f} so'm qo'shildi.\n"
                 f"Yangi balans: {user['balance']:,.0f} so'm",
                 parse_mode="HTML"
             )

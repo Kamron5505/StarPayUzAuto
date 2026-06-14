@@ -143,15 +143,16 @@ async def handle_click_complete(payload: dict, service_id: str, secret_key: str)
         }
     
     # Add balance
-    new_balance = await add_balance(user_id, amount_int)
-    
-    # Send notification
+    new_balance = await add_balance(user_id, amount_int)    # Send notification
     from aiogram import Bot
     from aiogram.client.default import DefaultBotProperties
     from aiogram.enums import ParseMode
     from bot.config import settings
     
     if settings.bot_token:
+        check_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_check}">✅</tg-emoji>' if settings.custom_emoji_check else "✅"
+        premium_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_premium}">💎</tg-emoji>' if settings.custom_emoji_premium else "💎"
+        money_emoji = f'<tg-emoji emoji-id="{settings.custom_emoji_money}">💰</tg-emoji>' if settings.custom_emoji_money else "💰"
         bot = Bot(
             token=settings.bot_token,
             default=DefaultBotProperties(parse_mode=ParseMode.HTML),
@@ -159,10 +160,9 @@ async def handle_click_complete(payload: dict, service_id: str, secret_key: str)
         try:
             await bot.send_message(
                 user_id,
-                f"✅ <b>To'lov muvaffaqiyatli!</b>\n\n"
-                f"💰 Hisob to'ldirildi: <b>{amount_int:,}</b> so'm\n"
-                f"📊 Yangi balans: <b>{new_balance:,}</b> so'm\n\n"
-                f"🔢 Tranzaksiya: <code>{click_trans_id}</code>"
+                f"{check_emoji} To'lov muvaffaqiyatli qabul qilindi\n\n"
+                f"{premium_emoji} +{amount_int:,} so'm\n"
+                f"{money_emoji} Balans: {new_balance:,} so'm",
             )
         except Exception as e:
             logger.warning("Could not notify user %s: %s", user_id, e)
