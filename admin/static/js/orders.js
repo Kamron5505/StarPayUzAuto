@@ -45,14 +45,23 @@ function filterOrders(type, value) {
     }
     ordersPage = 1;
     
-    // Update button styles
+    // Update all filter button styles
     const toolbar = document.querySelector('.toolbar');
     if (toolbar) {
         toolbar.querySelectorAll('.btn').forEach(btn => {
-            if (btn.textContent.includes('Все') && !value) {
+            const btnText = btn.textContent.trim();
+            const isActive = (
+                (btnText.includes('Все') && !value) ||
+                (btnText.includes('Ожидание') && value === 'pending') ||
+                (btnText.includes('Обработка') && value === 'processing') ||
+                (btnText.includes('Выполнено') && value === 'completed') ||
+                (btnText.includes('Ошибка') && value === 'failed') ||
+                (btnText.includes('Отменено') && value === 'cancelled')
+            );
+            if (isActive) {
                 btn.classList.add('btn-primary');
                 btn.classList.remove('btn-outline');
-            } else if (btn.textContent.includes('Все') && value) {
+            } else {
                 btn.classList.remove('btn-primary');
                 btn.classList.add('btn-outline');
             }

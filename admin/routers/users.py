@@ -140,21 +140,11 @@ async def block_user(
     if not result.fetchone():
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Check if column exists, try to add it if not
-    try:
-        await db.execute(
-            text("UPDATE users SET is_blocked = true WHERE telegram_id = :tid"),
-            {"tid": telegram_id},
-        )
-        await db.commit()
-    except Exception:
-        # Column doesn't exist yet - add it
-        await db.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN DEFAULT false"))
-        await db.execute(
-            text("UPDATE users SET is_blocked = true WHERE telegram_id = :tid"),
-            {"tid": telegram_id},
-        )
-        await db.commit()
+    await db.execute(
+        text("UPDATE users SET is_blocked = true WHERE telegram_id = :tid"),
+        {"tid": telegram_id},
+    )
+    await db.commit()
 
     await log_admin_action(
         db, admin.id, admin.username, "user_block",
@@ -179,19 +169,11 @@ async def unblock_user(
     if not result.fetchone():
         raise HTTPException(status_code=404, detail="User not found")
 
-    try:
-        await db.execute(
-            text("UPDATE users SET is_blocked = false WHERE telegram_id = :tid"),
-            {"tid": telegram_id},
-        )
-        await db.commit()
-    except Exception:
-        await db.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN DEFAULT false"))
-        await db.execute(
-            text("UPDATE users SET is_blocked = false WHERE telegram_id = :tid"),
-            {"tid": telegram_id},
-        )
-        await db.commit()
+    await db.execute(
+        text("UPDATE users SET is_blocked = false WHERE telegram_id = :tid"),
+        {"tid": telegram_id},
+    )
+    await db.commit()
 
     await log_admin_action(
         db, admin.id, admin.username, "user_unblock",

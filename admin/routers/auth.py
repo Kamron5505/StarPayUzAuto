@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from admin.database import get_db
-from admin.models.admin_user import AdminUser
 from admin.schemas.auth import (
     AdminUserInfo,
     ChangePasswordRequest,
@@ -20,7 +19,6 @@ from admin.services.auth_service import (
     hash_password,
     verify_password,
 )
-from sqlalchemy import select
 from admin.services.log_service import log_admin_action
 
 logger = logging.getLogger(__name__)
