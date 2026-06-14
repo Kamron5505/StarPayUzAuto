@@ -137,9 +137,15 @@ async function submitOrder(payload, btnId) {
         const result = await response.json();
 
         if (result.ok) {
+            const successMessages = {
+                buy_stars:   '⭐ Stars muvaffaqiyatli sotib olindi!',
+                buy_premium: '💎 Premium obuna muvaffaqiyatli faollashtirildi!',
+                buy_gift:    '🎁 Sovg\'a muvaffaqiyatli yuborildi!',
+                buy_phone:   '📱 Virtual raqam muvaffaqiyatli olindi!',
+            };
             tg.showPopup({
                 title: '✅ Muvaffaqiyatli',
-                message: 'Buyurtma qabul qilindi!',
+                message: successMessages[payload.action] || 'Buyurtma bajarildi!',
                 buttons: [{ type: 'ok' }]
             }, () => tg.close());
         } else {
@@ -154,7 +160,7 @@ async function submitOrder(payload, btnId) {
         setBuyButtonLoading(btnId, false);
         tg.showPopup({
             title: '❌ Tarmoq xatoligi',
-            message: e.message || 'Qayta urinib ko\'ring',
+            message: e.message || 'Serverga ulanib bo\'lmadi. Qayta urinib ko\'ring.',
             buttons: [{ type: 'close' }]
         });
     }
