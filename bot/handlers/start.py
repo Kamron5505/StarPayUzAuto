@@ -1,7 +1,13 @@
 from aiogram import Router
 from aiogram.filters import Command, CommandStart
-from aiogram.types import Message
+from aiogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+    WebAppInfo,
+)
 
+from bot.config import settings
 from bot.keyboards import bottom_reply_keyboard, main_inline_keyboard
 from services.database import ensure_user, get_user
 
@@ -37,6 +43,42 @@ def menu_text(
     f"<b>Kerakli bo'limni tanlang:</b>"
     f"</blockquote>"
   )
+
+
+@router.message(Command("admin"))
+async def cmd_admin(message: Message) -> None:
+    """Open admin panel (admins only)"""
+    if not message.from_user:
+        return
+
+    user_id = message.from_user.id
+    admin_ids = settings.admin_ids or []
+
+    if user_id not in admin_ids:
+        await message.answer(
+            "❌ <b>Bu buyruq faqat administratorlar uchun.</b>",
+            parse_mode="HTML",
+        )
+        return
+
+    admin_panel_url = "http://localhost:8000"
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="🔐 Admin Panelni ochish",
+                web_app=WebAppInfo(url=admin_panel_url),
+            )
+        ]
+    ])
+
+    await message.answer(
+        "🔐 <b>Admin Panel</b>\n\n"
+        "Xush kelibsiz, administrator!\n"
+        "Quyidagi tugma orqali admin panelni oching:",
+        reply_markup=keyboard,
+        parse_mode="HTML",
+    )
 
 
 @router.message(CommandStart())

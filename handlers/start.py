@@ -282,3 +282,40 @@ async def callback_support(callback: CallbackQuery):
     )
     
     await callback.message.answer(text, parse_mode="HTML")
+
+
+@router.message(Command("admin"))
+async def cmd_admin(message: Message):
+    """Open admin panel (admins only)"""
+    user_id = message.from_user.id
+    
+    # Check if user is admin
+    from config import ADMINS
+    if user_id not in ADMINS:
+        await message.answer(
+            "❌ <b>Bu buyruq faqat administratorlar uchun.</b>",
+            parse_mode="HTML"
+        )
+        return
+    
+    admin_panel_url = os.getenv("ADMIN_PANEL_URL", "http://localhost:8000")
+    
+    from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+    
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="🔐 Admin Panelni ochish",
+                web_app=WebAppInfo(url=admin_panel_url)
+            )
+        ]
+    ])
+    
+    await message.answer(
+        "🔐 <b>Admin Panel</b>\n\n"
+        "Xush kelibsiz, administrator!\n"
+        "Quyidagi tugma orqali admin panelni oching:\n\n"
+        f"<code>{admin_panel_url}</code>",
+        reply_markup=keyboard,
+        parse_mode="HTML"
+    )
